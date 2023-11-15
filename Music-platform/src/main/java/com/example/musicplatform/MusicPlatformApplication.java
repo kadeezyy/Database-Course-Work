@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MusicPlatformApplication {
-
+	//drain shawty
 	public static void main(String[] args) {
 		SpringApplication.run(MusicPlatformApplication.class, args);
 	}
