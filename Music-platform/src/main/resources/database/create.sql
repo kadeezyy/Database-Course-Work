@@ -1,19 +1,12 @@
-CREATE TABLE IF NOT EXISTS role (
-    id UUID PRIMARY KEY,
-    name VARCHAR(128) UNIQUE NOT NULL,
-    description TEXT NOT NULL
-);
+CREATE TYPE role AS ENUM ('admin', 'regular', 'artist');
 
 CREATE TABLE IF NOT EXISTS custom_user (
     id UUID PRIMARY KEY,
-    role_id UUID NOT NULL,
+    role_id role NOT NULL,
     username VARCHAR(128) NOT NULL,
     password VARCHAR(128) NOT NULL,
     email VARCHAR(128) UNIQUE NOT NULL,
-    creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT role_id_fk
-        FOREIGN KEY (role_id)
-            REFERENCES role (id)
+    creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX ON custom_user (username);
 
