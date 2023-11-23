@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS song (
     genre_id UUID NOT NULL,
     title VARCHAR(128) NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    likes_count SERIAL NOT NULL DEFAULT 0,
     CONSTRAINT genre_id_fk
         FOREIGN KEY (genre_id)
             REFERENCES genre (id)
@@ -34,7 +35,8 @@ CREATE TABLE IF NOT EXISTS artist (
     nickname VARCHAR(128) UNIQUE NOT NULL,
     CONSTRAINT user_id_fk
         FOREIGN KEY (user_id)
-            REFERENCES custom_user (id)
+            REFERENCES custom_user (id),
+    likes_count SERIAL NOT NULL DEFAULT 0
 );
 CREATE INDEX ON artist (nickname);
 
@@ -46,6 +48,7 @@ CREATE TABLE IF NOT EXISTS album (
     title VARCHAR(128) NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     songs_count INT NOT NULL,
+    likes_count SERIAL NOT NULL DEFAULT 0,
     CONSTRAINT artist_id_fk
         FOREIGN KEY (artist_id)
             REFERENCES artist (id),
@@ -60,6 +63,8 @@ CREATE TABLE IF NOT EXISTS playlist (
     user_creator_id UUID NOT NULL,
     title VARCHAR(128) NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    likes_count SERIAL NOT NULL DEFAULT 0,
     songs_count INT NOT NULL,
     CONSTRAINT user_creator_id_fk
         FOREIGN KEY (user_creator_id)
@@ -70,6 +75,7 @@ CREATE INDEX ON playlist (title);
 CREATE TABLE IF NOT EXISTS playlist_songs (
     playlist_id UUID NOT NULL,
     song_id UUID NOT NULL,
+    date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT playlist_id_fk
         FOREIGN KEY (playlist_id)
             REFERENCES playlist (id),
