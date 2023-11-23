@@ -135,6 +135,18 @@ CREATE TABLE IF NOT EXISTS user_favourite_playlists (
     PRIMARY KEY (user_id, playlist_id)
 );
 
+CREATE TABLE IF NOT EXISTS user_favourite_albums (
+    user_id UUID NOT NULL,
+    album_id UUID NOT NULL,
+    CONSTRAINT user_id_fk
+        FOREIGN KEY (user_id)
+            REFERENCES custom_user (id),
+    CONSTRAINT album_id_fk
+        FOREIGN KEY (album_id)
+            REFERENCES album (id),
+    PRIMARY KEY (user_id, album_id)
+);
+
 
 CREATE TABLE IF NOT EXISTS album_songs (
     album_id UUID NOT NULL,
