@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS custom_user (
 CREATE INDEX ON custom_user (username);
 
 CREATE TABLE IF NOT EXISTS genre (
-     id UUID PRIMARY KEY,
-     name VARCHAR(128) NOT NULL,
-     description VARCHAR(128) NOT NULL
+    id UUID PRIMARY KEY,
+    name VARCHAR(128) NOT NULL,
+    description VARCHAR(128) NOT NULL
 );
 CREATE INDEX ON genre (name);
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS album (
     genre_id UUID NOT NULL,
     title VARCHAR(128) NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    songs_count INT NOT NULL,
+    songs_count INT NOT NULL DEFAULT 0,
     likes_count INT NOT NULL DEFAULT 0,
     CONSTRAINT artist_id_fk
         FOREIGN KEY (artist_id)
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS playlist (
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     likes_count INT NOT NULL DEFAULT 0,
-    songs_count INT NOT NULL,
+    songs_count INT NOT NULL DEFAULT 0,
     CONSTRAINT user_creator_id_fk
         FOREIGN KEY (user_creator_id)
             REFERENCES custom_user (id)
@@ -86,15 +86,15 @@ CREATE TABLE IF NOT EXISTS playlist_songs (
 );
 
 CREATE TABLE IF NOT EXISTS user_favourite_artists (
-    user_id UUID NOT NULL,
-    artist_id UUID NOT NULL,
-    CONSTRAINT artist_id_fk
-        FOREIGN KEY (artist_id)
-            REFERENCES artist (id),
-    CONSTRAINT user_id_fk
-        FOREIGN KEY (user_id)
-            REFERENCES custom_user (id),
-    PRIMARY KEY (user_id, artist_id)
+      user_id UUID NOT NULL,
+      artist_id UUID NOT NULL,
+      CONSTRAINT artist_id_fk
+          FOREIGN KEY (artist_id)
+              REFERENCES artist (id),
+      CONSTRAINT user_id_fk
+          FOREIGN KEY (user_id)
+              REFERENCES custom_user (id),
+      PRIMARY KEY (user_id, artist_id)
 );
 
 CREATE TABLE IF NOT EXISTS user_liked_songs (
@@ -171,5 +171,4 @@ CREATE TABLE IF NOT EXISTS artist_songs (
             REFERENCES song (id),
     PRIMARY KEY (artist_id, song_id)
 );
-
 

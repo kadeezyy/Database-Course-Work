@@ -10,11 +10,29 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_playlist_songs_count
+CREATE OR REPLACE TRIGGER update_playlist_songs_count
     AFTER INSERT OR DELETE
     ON "playlist_songs"
     FOR EACH ROW
 EXECUTE FUNCTION update_playlist_songs_count_func();
+
+-- Update "songs_count" field in "album"
+CREATE OR REPLACE FUNCTION update_album_songs_count_func()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    UPDATE "album"
+    SET songs_count = (SELECT COUNT(*) FROM album_songs WHERE album_id = NEW.album_id)
+    WHERE id = NEW.album_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER update_album_songs_count
+    AFTER INSERT OR DELETE
+    ON "album_songs"
+    FOR EACH ROW
+EXECUTE FUNCTION update_album_songs_count_func();
 
 -- Update "last_updated" field in "playlist"
 CREATE OR REPLACE FUNCTION update_playlist_last_updated_field_func()
@@ -28,7 +46,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_playlist_last_updated_field
+CREATE OR REPLACE TRIGGER update_playlist_last_updated_field
     AFTER INSERT OR DELETE OR UPDATE -- Updated for all changes
     ON "playlist_songs"
     FOR EACH ROW
@@ -46,7 +64,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_artists_likes_count
+CREATE OR REPLACE TRIGGER update_artists_likes_count
     AFTER INSERT OR DELETE
     ON "user_favourite_artists"
     FOR EACH ROW
@@ -64,7 +82,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_song_like_count
+CREATE OR REPLACE TRIGGER update_song_like_count
     AFTER INSERT OR DELETE
     ON "user_liked_songs"
     FOR EACH ROW
@@ -82,7 +100,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_playlist_like_count
+CREATE OR REPLACE TRIGGER update_playlist_like_count
     AFTER INSERT OR DELETE
     ON "user_favourite_playlists"
     FOR EACH ROW
@@ -100,7 +118,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_album_like_count
+CREATE OR REPLACE TRIGGER update_album_like_count
     AFTER INSERT OR DELETE
     ON "user_favourite_albums"
     FOR EACH ROW
@@ -116,8 +134,26 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_listening_history_timestamp_trigger
+CREATE OR REPLACE TRIGGER update_listening_history_timestamp_trigger
     BEFORE INSERT
     ON user_listening_history
     FOR EACH ROW
 EXECUTE FUNCTION update_listening_history_timestamp();
+
+--Update field role in custom_user
+CREATE OR REPLACE FUNCTION update_artist_role()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    UPDATE custom_user
+    SET role_id = 'artist'
+    WHERE id = NEW.user_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER update_artist_role
+    AFTER INSERT
+    ON artist
+    FOR EACH ROW
+EXECUTE FUNCTION update_artist_role();
