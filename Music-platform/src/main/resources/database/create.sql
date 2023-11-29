@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS custom_user (
 
 CREATE TABLE IF NOT EXISTS genre (
     id UUID PRIMARY KEY,
-    name VARCHAR(128) NOT NULL,
+    name VARCHAR(128) NOT NULL unique,
     description VARCHAR(128) NOT NULL
 );
 CREATE INDEX ON genre (name);
