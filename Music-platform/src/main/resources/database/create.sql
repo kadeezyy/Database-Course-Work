@@ -8,11 +8,12 @@ CREATE TABLE IF NOT EXISTS custom_user (
     email VARCHAR(128) UNIQUE NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-CREATE INDEX ON custom_user (username);
+-- CREATE INDEX ON custom_user (username);
+-- DROP INDEX custom_user_username_idx;
 
 CREATE TABLE IF NOT EXISTS genre (
     id UUID PRIMARY KEY,
-    name VARCHAR(128) NOT NULL,
+    name VARCHAR(128) NOT NULL unique,
     description VARCHAR(128) NOT NULL
 );
 CREATE INDEX ON genre (name);

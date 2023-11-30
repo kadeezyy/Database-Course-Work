@@ -10,5 +10,6 @@ DROP TABLE IF EXISTS user_favourite_artists;
 DROP TABLE IF EXISTS user_liked_songs;
 DROP TABLE IF EXISTS user_listening_history;
 DROP TABLE IF EXISTS user_favourite_playlists;
+DROP TABLE IF EXISTS user_favourite_albums;
 DROP TABLE IF EXISTS album_songs;
 DROP TABLE IF EXISTS artist_songs;

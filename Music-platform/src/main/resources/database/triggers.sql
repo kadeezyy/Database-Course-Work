@@ -135,7 +135,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER update_listening_history_timestamp_trigger
-    BEFORE INSERT
+    AFTER INSERT
     ON user_listening_history
     FOR EACH ROW
 EXECUTE FUNCTION update_listening_history_timestamp();
