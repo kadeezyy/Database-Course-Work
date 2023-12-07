@@ -11,8 +11,7 @@ SELECT *
 FROM get_artist_song_info();
 
 -- Получить количество песен в альбоме
-SELECT *
-FROM get_album_song_count();
+SELECT * FROM get_album_song_count();
 -- Аналогичный запрос
 SELECT album.title as album_name, COUNT(song.title) as songs
 FROM album_songs

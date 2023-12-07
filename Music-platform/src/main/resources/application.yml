@@ -7,3 +7,10 @@ spring:
         hikari:
             maximum-pool-size: 10
             minimum-idle: 10
+    jooq:
+        sql-dialect: postgres
+#datasource:
+#    driver: org.postgresql.Driver
+#    jdbcUrl: jdbc:postgresql://localhost:5432/postgres
+#    username: kanat
+#    password: 31p6hd19
