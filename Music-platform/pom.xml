@@ -15,11 +15,21 @@
 	<description>Music-platform</description>
 	<properties>
 		<java.version>17</java.version>
+		<datasource.driver>org.postgresql.Driver</datasource.driver>
+		<datasource.jdbcUrl>jdbc:postgresql://localhost:5432/postgres</datasource.jdbcUrl>
+		<datasource.username>postgres</datasource.username>
+		<datasource.password>31p6hd19</datasource.password>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq</artifactId>
+			<version>3.16.18</version>
 		</dependency>
 
 		<dependency>
@@ -53,7 +63,51 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+
+			<plugin>
+				<groupId>org.jooq</groupId>
+				<artifactId>jooq-codegen-maven</artifactId>
+				<executions>
+					<execution>
+						<id>generate-postgres</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<!-- JDBC connection parameters -->
+							<jdbc>
+								<driver>${datasource.driver}</driver>
+								<url>${datasource.jdbcUrl}</url>
+								<user>${datasource.username}</user>
+								<password>${datasource.password}</password>
+							</jdbc>
+							<!-- Generator parameters -->
+							<generator>
+								<database>
+									<name>
+										org.jooq.meta.postgres.PostgresDatabase
+									</name>
+									<includes>.*</includes>
+									<excludes/>
+									<inputSchema>public</inputSchema>
+								</database>
+								<generate>
+									<pojos>true</pojos>
+									<pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
+									<javaTimeTypes>true</javaTimeTypes>
+									<fluentSetters>true</fluentSetters>
+								</generate>
+								<target>
+									<packageName>com.example.musicplatform.entity</packageName>
+									<directory>target/generated-sources/jooq</directory>
+								</target>
+							</generator>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
