@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: Components for music platform service
+  description: Specification for Music Platform backend service
+  version: 1.0.0
+paths: { }
+components:
+  schemas:
+    User:
+      description: information about the user
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID
+        roleId:
+          type: integer
+          description: foreign key to role's ID
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        creationDate:
+          type: string
+          description: user's creation date
+
+    Album:
+      description: information about album
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID
+        title:
+          type: string
+        songs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Song"
+    Playlist:
+      description: information about playlist
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID
+        userCreatorId:
+          type: string
+          description: UUID foreign key to owner
+        creationDate:
+          type: string
+          description: date of playlist's creation
+        lastUpdated:
+          type: string
+          description: date of playlist's last update
+        likesCount:
+          type: integer
+          description: songs count of a playlist
+        songsCount:
+          type: integer
+          description: playlist's song count
+        songs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Song"
+
+    AlbumTitle:
+      description: title of an album
+      type: string
+      example: Good kid m.a.a.d city
+
+    SongTitle:
+      description: title of a song
+      type: string
+      example: Money Trees
+
+    PlaylistTitle:
+      description: title of a playlist
+      type: string
+      example: chill songs
+
+    Artist:
+      description: information about artist
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID of an artist
+        userId:
+          type: string
+          description: UUID foreign key to user
+        nickname:
+          type: string
+          description: name of an artist
+        likesCount:
+          type: integer
+          description: songs count of an artist
+
+    Song:
+      description: information
+      type: object
+      properties:
+        id:
+          description: UUID
+          type: string
+        title:
+          description: name of a song
+          type: string
+        genreId:
+          type: string
+          description: UUID of a genre
+        creationDate:
+          description: date a song creation
+          type: string
+        likesCount:
+          type: integer
+          description: likes count
+
+    Genre:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID
+        title:
+          type: string
+          description: name of a genre
+        description:
+          type: string
+          description: description of the genre

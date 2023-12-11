@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: Music Platform backend service
+  description: Specification for Music Platform backend service
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:80/v1
+paths:
+  /user/{userId}:
+    get:
+      description: Returns list of users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string #rewrite
+        401:
+          $ref: './common/responses.yaml#/components/responses/401'
+  /album/{albumId}:
+    get:
+      description: Returns list of users
+      parameters:
+        - name: albumId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  songs:
+                    type: array
+                    items:
+                      type: object
+        404:
+          $ref: './common/responses.yaml#/components/responses/404'
+  /album/:
+    post:
+      description: Get a certain album
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './components.yaml#/components/schemas/Album'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: inserted album's UUID
+        400:
+          $ref: './common/responses.yaml#/components/responses/400'
+
+  /song/{songId}:
+    get:
+      description: returns song information
+      parameters:
+        - name: songId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                #                type: object
+                $ref: './components.yaml#/components/schemas/Song'
+        400:
+          #          description: Song not found
+          $ref: './common/responses.yaml#/components/responses/400'
+  /song/likedSongs/:
+    get:
+      description: Returns list of user's liked songs
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components.yaml#/components/schemas/Song'
+        400:
+          $ref: './common/responses.yaml#/components/responses/400'
+    post:
+      description: Add song to "Liked songs" playlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components.yaml#/components/schemas/Song'
+      responses:
+        200:
+          description: OK
+        400:
+          $ref: './common/responses.yaml#/components/responses/400'
+  /song/likedSongs/{songId}:
+    delete:
+      description: Remove song from "Liked songs" Playlist
+      parameters:
+        - name: songId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+        400:
+          $ref: './common/responses.yaml#/components/responses/400'
+
+  /playlist/:
+    post:
+      description: Get a certain playlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './components.yaml#/components/schemas/Playlist'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: inserted playlist's UUID
+        400:
+          $ref: './common/responses.yaml#/components/responses/400'
+  /playlist/{playlistId}:
+    get:
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Gets playlist
+          content:
+            application/json:
+              schema:
+                $ref: './components.yaml#/components/schemas/Playlist'
+        400:
+          $ref: './common/responses.yaml#/components/responses/400'
+    delete:
+      description: Delete user's playlist
+      parameters:
+        - name: playlistId
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: OK
+        400:
+          $ref: './common/responses.yaml#/components/responses/400'
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
