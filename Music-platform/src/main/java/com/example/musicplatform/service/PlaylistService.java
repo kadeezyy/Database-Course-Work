@@ -5,6 +5,7 @@ import com.example.musicplatform.repository.PlaylistRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,24 @@ public class PlaylistService {
         return new HashMap<>() {{
             put("info", playlistInfo);
             put("songs", playlistSongs);
+        }};
+    }
+
+    public Map<String, UUID> createPlaylist(Playlist playlist) {
+        return new HashMap<>() {{
+            put("id", repository.createPlaylist(playlist));
+        }};
+    }
+
+    public Map<String, UUID> insertSongIntoPlaylist(UUID songId, UUID playlistId) {
+        return new HashMap<>() {{
+            put("id", repository.insertSongIntoPlaylist(songId, playlistId));
+        }};
+    }
+
+    public Map<String, UUID> removeSongFromPlaylist(UUID songId, UUID playlistId) {
+        return new HashMap<>(){{
+            put("id", repository.removeSongFromPlaylist(songId, playlistId));
         }};
     }
 }

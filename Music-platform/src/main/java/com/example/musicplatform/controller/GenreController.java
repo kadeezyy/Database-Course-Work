@@ -21,7 +21,7 @@ public class GenreController {
         return service.getGenreInfo(id);
     }
 
-    @PostMapping("/createGenre")
+    @PostMapping("/insertGenre")
     public Map<String, UUID> createGenre(@RequestBody Genre genre) {
         return service.createGenre(genre);
     }

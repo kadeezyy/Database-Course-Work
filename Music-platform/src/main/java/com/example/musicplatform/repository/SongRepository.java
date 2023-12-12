@@ -23,5 +23,18 @@ public class SongRepository {
         ).into(Song.class);
     }
 
-
+    public UUID createSong(Song song) {
+        return jooq.insertInto(SONG,
+                SONG.ID,
+                SONG.TITLE,
+                SONG.GENRE_ID,
+                SONG.CREATION_DATE,
+                SONG.LIKES_COUNT).values(
+                        song.getId(),
+                song.getTitle(),
+                song.getGenreId(),
+                song.getCreationDate(),
+                song.getLikesCount()
+        ).returning().fetchSingle().get(SONG.ID);
+    }
 }

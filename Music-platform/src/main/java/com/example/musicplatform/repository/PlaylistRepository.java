@@ -38,4 +38,37 @@ public class PlaylistRepository {
     }
 
 
+    public UUID createPlaylist(Playlist playlist) {
+        return jooq.insertInto(PLAYLIST,
+                PLAYLIST.ID,
+                PLAYLIST.TITLE,
+                PLAYLIST.CREATION_DATE,
+                PLAYLIST.LAST_UPDATED,
+                PLAYLIST.USER_CREATOR_ID,
+                PLAYLIST.LIKES_COUNT,
+                PLAYLIST.SONGS_COUNT).values(
+                playlist.getId(),
+                playlist.getTitle(),
+                playlist.getCreationDate(),
+                playlist.getLastUpdated(),
+                playlist.getUserCreatorId(),
+                playlist.getLikesCount(),
+                playlist.getSongsCount()
+        ).returning().fetchSingle().get(PLAYLIST.ID);
+    }
+
+    public UUID insertSongIntoPlaylist(UUID songId, UUID playlistId) {
+        return jooq.insertInto(PlaylistSongs.PLAYLIST_SONGS,
+                PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID,
+                PlaylistSongs.PLAYLIST_SONGS.SONG_ID).values(
+                playlistId, songId
+        ).returning().fetchSingle().get(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID);
+    }
+
+    public UUID removeSongFromPlaylist(UUID songId, UUID playlistId) {
+        return jooq.deleteFrom(PlaylistSongs.PLAYLIST_SONGS)
+                .where(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID.equal(playlistId)
+                        .and(PlaylistSongs.PLAYLIST_SONGS.SONG_ID.equal(songId)))
+                .returning().fetchSingle().get(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID);
+    }
 }

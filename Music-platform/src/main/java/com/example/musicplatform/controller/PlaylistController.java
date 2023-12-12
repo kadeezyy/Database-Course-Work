@@ -1,13 +1,12 @@
 package com.example.musicplatform.controller;
 
 import com.example.musicplatform.model.pojos.Playlist;
+import com.example.musicplatform.model.pojos.PlaylistSongs;
 import com.example.musicplatform.service.PlaylistService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -27,5 +26,20 @@ public class PlaylistController {
     @GetMapping("/getPlaylist/{id}")
     public HashMap<String, Object> getPlaylist(@PathVariable UUID id) {
         return service.getPlaylist(id);
+    }
+
+    @PostMapping("/insertPlaylist")
+    public Map<String, UUID> createPlaylist(@RequestBody Playlist playlist) {
+        return service.createPlaylist(playlist);
+    }
+
+    @PostMapping("/insertSong")
+    public Map<String, UUID> insertSongIntoPlaylist(@RequestBody UUID songId, @RequestBody UUID playlistId) {
+        return service.insertSongIntoPlaylist(songId, playlistId);
+    }
+
+    @DeleteMapping("/removeSong")
+    public Map<String, UUID> removeSongFromPlaylist( @RequestBody UUID songId, @RequestBody UUID playlistId) {
+        return service.removeSongFromPlaylist(songId, playlistId);
     }
 }

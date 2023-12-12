@@ -4,6 +4,7 @@ import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.repository.AlbumRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -18,8 +19,10 @@ public class AlbumService {
         return repository.get(albumId);
     }
 
-    public UUID insertAlbum(Album album) {
-        return repository.add(album);
+    public HashMap<String, UUID> insertAlbum(Album album) {
+        return new HashMap<>() {{
+            put("id", repository.add(album));
+        }};
     }
 
 
