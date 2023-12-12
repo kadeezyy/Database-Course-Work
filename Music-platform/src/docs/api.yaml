@@ -29,7 +29,7 @@ paths:
           $ref: './common/responses.yaml#/components/responses/401'
   /album/{albumId}:
     get:
-      description: Returns list of users
+      description: Returns list of artists
       parameters:
         - name: albumId
           in: path

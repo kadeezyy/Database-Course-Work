@@ -1,8 +1,10 @@
+server:
+    port: 8181
 spring:
     datasource:
         url: "jdbc:postgresql://localhost:5432/postgres"
-        username: ${DB_USERNAME}
-        password: ${DB_PASSWORD}
+        username: postgres
+        password: 31p6hd19
         driverClassName: org.postgresql.Driver
         hikari:
             maximum-pool-size: 10
@@ -12,5 +14,5 @@ spring:
 #datasource:
 #    driver: org.postgresql.Driver
 #    jdbcUrl: jdbc:postgresql://localhost:5432/postgres
-#    username: kanat
-#    password: 31p6hd19
+#    username:
+#    password:
