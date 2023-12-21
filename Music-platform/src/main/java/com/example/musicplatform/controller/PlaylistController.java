@@ -1,8 +1,10 @@
 package com.example.musicplatform.controller;
 
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.PlaylistSongs;
 import com.example.musicplatform.service.PlaylistService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,23 +25,30 @@ public class PlaylistController {
         return service.getPlaylistInfo(id);
     }
 
-    @GetMapping("/getPlaylist/{id}")
+    @GetMapping("/{id}")
     public HashMap<String, Object> getPlaylist(@PathVariable UUID id) {
         return service.getPlaylist(id);
     }
 
     @PostMapping("/insertPlaylist")
-    public Map<String, UUID> createPlaylist(@RequestBody Playlist playlist) {
-        return service.createPlaylist(playlist);
+    public Map<String, UUID> createPlaylist(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody Playlist playlist
+    ) {
+        return service.createPlaylist(user, playlist);
     }
 
     @PostMapping("/insertSong")
-    public Map<String, UUID> insertSongIntoPlaylist(@RequestBody UUID songId, @RequestBody UUID playlistId) {
-        return service.insertSongIntoPlaylist(songId, playlistId);
+    public Map<String, UUID> insertSongIntoPlaylist(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody UUID songId,
+            @RequestBody UUID playlistId
+    ) {
+        return service.insertSongIntoPlaylist(user, songId, playlistId);
     }
 
     @DeleteMapping("/removeSong")
-    public Map<String, UUID> removeSongFromPlaylist( @RequestBody UUID songId, @RequestBody UUID playlistId) {
+    public Map<String, UUID> removeSongFromPlaylist(@RequestBody UUID songId, @RequestBody UUID playlistId) {
         return service.removeSongFromPlaylist(songId, playlistId);
     }
 }

@@ -16,7 +16,7 @@ public class GenreController {
         this.service = service;
     }
 
-    @GetMapping("/getGenreInfo/{id}")
+    @GetMapping("/{id}")
     public Genre getGenreInfo(@PathVariable UUID id) {
         return service.getGenreInfo(id);
     }

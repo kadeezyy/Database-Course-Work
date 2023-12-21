@@ -1,8 +1,11 @@
 package com.example.musicplatform.repository;
 
+import com.example.musicplatform.entity.Routines;
+import com.example.musicplatform.entity.routines.AddPlaylist;
 import com.example.musicplatform.entity.tables.PlaylistSongs;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
@@ -38,26 +41,27 @@ public class PlaylistRepository {
     }
 
 
-    public UUID createPlaylist(Playlist playlist) {
-        return jooq.insertInto(PLAYLIST,
-                PLAYLIST.ID,
-                PLAYLIST.TITLE,
-                PLAYLIST.CREATION_DATE,
-                PLAYLIST.LAST_UPDATED,
-                PLAYLIST.USER_CREATOR_ID,
-                PLAYLIST.LIKES_COUNT,
-                PLAYLIST.SONGS_COUNT).values(
-                playlist.getId(),
-                playlist.getTitle(),
-                playlist.getCreationDate(),
-                playlist.getLastUpdated(),
-                playlist.getUserCreatorId(),
-                playlist.getLikesCount(),
-                playlist.getSongsCount()
-        ).returning().fetchSingle().get(PLAYLIST.ID);
+    public UUID createPlaylist(CustomUser user, Playlist playlist) {
+        return jooq.select(Routines.addPlaylist(user.getUsername(), playlist.getTitle())).fetchOne(0, UUID.class);
+//        return jooq.insertInto(PLAYLIST,
+//                PLAYLIST.ID,
+//                PLAYLIST.TITLE,
+//                PLAYLIST.CREATION_DATE,
+//                PLAYLIST.LAST_UPDATED,
+//                PLAYLIST.USER_CREATOR_ID,
+//                PLAYLIST.LIKES_COUNT,
+//                PLAYLIST.SONGS_COUNT).values(
+//                playlist.getId(),
+//                playlist.getTitle(),
+//                playlist.getCreationDate(),
+//                playlist.getLastUpdated(),
+//                playlist.getUserCreatorId(),
+//                playlist.getLikesCount(),
+//                playlist.getSongsCount()
+//        ).returning().fetchSingle().get(PLAYLIST.ID);
     }
 
-    public UUID insertSongIntoPlaylist(UUID songId, UUID playlistId) {
+    public UUID insertSongIntoPlaylist(CustomUser user, UUID songId, UUID playlistId) {
         return jooq.insertInto(PlaylistSongs.PLAYLIST_SONGS,
                 PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID,
                 PlaylistSongs.PLAYLIST_SONGS.SONG_ID).values(

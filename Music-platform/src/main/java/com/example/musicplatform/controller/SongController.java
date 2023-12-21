@@ -12,7 +12,6 @@ import java.util.UUID;
 public class SongController {
     private final SongService service;
 
-
     public SongController(SongService service) {
         this.service = service;
     }
@@ -22,7 +21,7 @@ public class SongController {
         return service.createSong(song);
     }
 
-    @GetMapping("/getSong/{id}")
+    @GetMapping("/{id}")
     public Song getSong(@PathVariable UUID id) {
         return service.getSong(id);
     }
