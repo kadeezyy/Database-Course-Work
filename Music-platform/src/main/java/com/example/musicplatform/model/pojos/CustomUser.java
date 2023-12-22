@@ -5,6 +5,7 @@ package com.example.musicplatform.model.pojos;
 
 
 import com.example.musicplatform.model.enums.Role;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

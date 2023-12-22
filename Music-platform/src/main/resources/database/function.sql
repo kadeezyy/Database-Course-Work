@@ -201,3 +201,23 @@ BEGIN
     RETURN album_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Create new Jwt token
+CREATE OR REPLACE FUNCTION add_jwt_token(
+    user_id UUID,
+    expired bool DEFAULT FALSE,
+    revoked bool DEFAULT FALSE,
+    token varchar(128) DEFAULT ''
+)
+    RETURNS UUID AS
+$$
+DECLARE
+    jwt_token_id UUID;
+BEGIN
+    INSERT INTO JWT_TOKEN (id, user_id, expired, revoked, token)
+    VALUES (gen_random_uuid(), user_id, expired, revoked, token)
+    RETURNING id INTO jwt_token_id;
+
+    RETURN jwt_token_id;
+END;
+$$ LANGUAGE plpgsql;
