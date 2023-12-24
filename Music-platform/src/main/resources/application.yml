@@ -1,6 +1,14 @@
 server:
     port: 8181
 spring:
+    security:
+        jwt:
+            api-secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970 #256 bytes
+            expiration-time: 604800000 # a week
+            refresh-token:
+                expiration-time: 2419200000 # a month
+#        hashEncoder:
+#            algorithmInstance: SHA-256
     datasource:
         url: "jdbc:postgresql://localhost:5432/postgres"
         username: postgres

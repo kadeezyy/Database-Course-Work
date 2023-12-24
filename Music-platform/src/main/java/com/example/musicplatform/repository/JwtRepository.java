@@ -6,6 +6,7 @@ import com.example.musicplatform.model.pojos.JwtToken;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -19,5 +20,22 @@ public class JwtRepository {
 
     public UUID save(String token, CustomUser user) {
         return jooq.select(Routines.addJwtToken(user.getId(), false, false, token)).fetchOne(0, UUID.class);
+    }
+
+    public List<JwtToken> findAllValidTokenByUser(CustomUser user) {
+        return jooq.select().from(JWT_TOKEN)
+                .where(JWT_TOKEN.USER_ID.eq(user.getId()))
+                .fetch()
+                .into(JwtToken.class);
+    }
+
+    public void saveAll(List<JwtToken> validUserTokens) {
+        for (JwtToken token : validUserTokens) {
+            jooq.update(JWT_TOKEN)
+                    .set(JWT_TOKEN.EXPIRED, token.getExpired())
+                    .set(JWT_TOKEN.REVOKED, token.getRevoked())
+                    .where(JWT_TOKEN.ID.eq(token.getId()))
+                    .execute();
+        }
     }
 }

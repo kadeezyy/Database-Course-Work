@@ -18,8 +18,12 @@ public class UserServiceConfig {
 
     @Bean
     public UserDetailsService userDetailsService() throws UsernameNotFoundException {
-        return username -> userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            var user = userRepository.findUserByUsername(username);
+            if (user == null)
+                throw new UsernameNotFoundException("User not found");
+            return user;
+        };
     }
 
     @Bean

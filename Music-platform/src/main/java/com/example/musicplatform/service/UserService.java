@@ -2,6 +2,8 @@ package com.example.musicplatform.service;
 
 import com.example.musicplatform.dto.CustomUserDto;
 import com.example.musicplatform.dto.JwtTokenDto;
+import com.example.musicplatform.exception.NotFoundException;
+import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.repository.JwtRepository;
 import com.example.musicplatform.repository.UserRepository;
@@ -20,16 +22,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserConverter userConverter;
     private final AuthenticationManager authenticationManager;
     private final JwtRepository jwtTokenRepository;
     private final JwtService jwtService;
@@ -37,45 +35,44 @@ public class UserService {
     @Autowired
     public UserService(
             UserRepository userRepository,
-            UserConverter userConverter,
             AuthenticationManager authenticationManager,
             JwtService jwtService,
             JwtRepository jwtTokenRepository,
             DSLContext jooq) {
         this.userRepository = userRepository;
-        this.userConverter = userConverter;
-        this.jooq = jooq;
         this.passwordEncoder = new BCryptPasswordEncoder();
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.jwtTokenRepository = jwtTokenRepository;
     }
 
-    public JwtTokenDto registerUser(CustomUser CustomUser) {
+    public JwtTokenDto registerUser(CustomUserDto CustomUser) {
         CustomUserDto user = CustomUserDto.builder()
                 .username(CustomUser.getUsername())
-                .password(passwordEncoder.encode(CustomUser.getPassword())).build();
-        if (userRepository.findUserByUsername(user.getUsername()).isPresent())
-            throw new NotUniqueUsernameException(user.getUsername());
+                .password(passwordEncoder.encode(CustomUser.getPassword()))
+                .build();
+        if (userRepository.findUserByUsername(user.getUsername()) != null)
+            throw new NotFoundException(DataAccessMessages.NOT_UNIQUE_OBJECT.name());
 
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(savedUser);
         var refreshToken = jwtService.generateRefreshToken(savedUser);
-        saveUserToken(user, jwtToken);
+        saveUserToken(savedUser, jwtToken);
         return JwtTokenDto.builder()
                 .access_token(jwtToken)
                 .refresh_token(refreshToken).build();
     }
 
-    public JwtTokenDto authenticateUser(CustomUser CustomUser) throws AuthenticationException {
+    public JwtTokenDto authenticateUser(CustomUserDto customUser) throws AuthenticationException {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        CustomUser.getUsername(),
-                        CustomUser.getPassword()
+                        customUser.getUsername(),
+                        customUser.getPassword()
                 )
         );
-        var user = userRepository.findUserByUsername(CustomUser.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        var user = userRepository.findUserByUsername(customUser.getUsername());
+        if (user == null)
+            throw new UsernameNotFoundException("User not found");
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
@@ -94,9 +91,10 @@ public class UserService {
         refreshToken = authHeader.substring(7);
         username = jwtService.extractUsername(refreshToken);
         if (username != null) {
-            var user = userRepository.findUserByUsername(username).orElseThrow(
-                    () -> new UsernameNotFoundException("No user found")
-            );
+            var user = userRepository.findUserByUsername(username);
+            if (user == null)
+                throw new UsernameNotFoundException("No user found");
+
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
@@ -112,7 +110,7 @@ public class UserService {
     }
 
     private void revokeAllUserTokens(CustomUser user) {
-        var validUserTokens = jwtTokenRepository.findAllValidTokenByUser(user.getId());
+        var validUserTokens = jwtTokenRepository.findAllValidTokenByUser(user);
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {
@@ -122,20 +120,19 @@ public class UserService {
         jwtTokenRepository.saveAll(validUserTokens);
     }
 
-    public CustomUser findUserById(int id) {
-        Optional<CustomUser> user = userRepository.findUserById(id);
-        return user.map(value -> userConverter.userEntityToDto(value)).orElse(null);
+    public CustomUser findUserById(UUID id) {
+        return userRepository.findUserById(id);
     }
 
-    public List<CustomUser> findAllUsersByUsername(String name) {
-        var users = userRepository.findAllUsersByUsername(name);
-        if (users.isEmpty())
-            throw new UsernameNotFoundException("No users with such username: " + name);
-        List<CustomUser> resultUsers = new ArrayList<>();
-        for (var user : users)
-            user.ifPresent(value -> resultUsers.add(userConverter.userEntityToDto(value)));
-        return resultUsers;
-    }
+//    public List<CustomUser> findAllUsersByUsername(String name) {
+//        var users = userRepository.findAllUsersByUsername(name);
+//        if (users.isEmpty())
+//            throw new UsernameNotFoundException("No users with such username: " + name);
+//        List<CustomUser> resultUsers = new ArrayList<>();
+//        for (var user : users)
+//            user.ifPresent(value -> resultUsers.add(userConverter.userEntityToDto(value)));
+//        return resultUsers;
+//    }
 
     private void saveUserToken(CustomUser user, String jwtToken) {
         jwtTokenRepository.save(jwtToken, user);

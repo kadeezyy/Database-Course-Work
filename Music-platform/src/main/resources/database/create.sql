@@ -182,4 +182,4 @@ CREATE TABLE IF NOT EXISTS JWT_TOKEN (
     CONSTRAINT user_id_fk
         FOREIGN KEY (user_id)
             REFERENCES custom_user (id)
-)
+);
