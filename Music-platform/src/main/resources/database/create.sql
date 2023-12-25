@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS JWT_TOKEN (
     user_id UUID NOT NULL,
     expired bool NOT NULL DEFAULT FALSE,
     revoked bool NOT NULL DEFAULT FALSE,
-    token varchar(128) NOT NULL,
+    token varchar NOT NULL,
     CONSTRAINT user_id_fk
         FOREIGN KEY (user_id)
             REFERENCES custom_user (id)

@@ -6,8 +6,8 @@ import com.example.musicplatform.entity.enums.Role;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.CustomUser;
-import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
+import static org.jooq.impl.DSL.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class UserRepository {
     public CustomUser findUserByUsername(String username) {
         return jooq.select().from(CUSTOM_USER)
                 .where(CUSTOM_USER.USERNAME.eq(username))
-                .fetchOne(0, CustomUser.class);
+                .fetchOneInto(CustomUser.class);
     }
 
 

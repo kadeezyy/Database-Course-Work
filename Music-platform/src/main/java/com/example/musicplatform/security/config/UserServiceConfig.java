@@ -14,7 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class UserServiceConfig {
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Bean
     public UserDetailsService userDetailsService() throws UsernameNotFoundException {

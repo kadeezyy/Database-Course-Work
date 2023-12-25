@@ -34,7 +34,7 @@ public class JooqConfiguration {
         dataSource.setDriverClassName(environment.getRequiredProperty("spring.datasource.driverClassName"));
         dataSource.setMaximumPoolSize(Integer.parseInt(environment.getRequiredProperty("spring.datasource.hikari.maximum-pool-size")));
         dataSource.setMinimumIdle(Integer.parseInt(environment.getRequiredProperty("spring.datasource.hikari.minimum-idle")));
-        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
+        dataSource.setJdbcUrl(environment.getRequiredProperty("spring.datasource.url"));
         dataSource.setUsername(environment.getRequiredProperty("spring.datasource.username"));
         dataSource.setPassword(environment.getRequiredProperty("spring.datasource.password"));
         return new HikariDataSource(dataSource);

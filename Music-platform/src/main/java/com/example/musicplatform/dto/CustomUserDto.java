@@ -13,12 +13,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class CustomUserDto implements Serializable {
-//    private UUID id;
+    //    private UUID id;
     private String username;
-    private String email;
 
     @Builder.Default
     private String password = "hidden";
+    private String email;
 
     private Role role = Role.regular;
 }

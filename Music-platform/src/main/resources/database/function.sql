@@ -127,20 +127,25 @@ $$ LANGUAGE plpgsql;
 
 
 -- create new user
-CREATE OR REPLACE FUNCTION create_new_user(user_role role, user_username VARCHAR(128), user_password VARCHAR(128),
-                                           user_email VARCHAR(128))
-    RETURNS UUID AS
+CREATE OR REPLACE FUNCTION create_new_user(
+    user_role role,
+    user_username VARCHAR(128),
+    user_password VARCHAR(128),
+    user_email VARCHAR(128)
+)
+    RETURNS custom_user AS
 $$
 DECLARE
-    new_user_id UUID;
+    new_user custom_user;
 BEGIN
     INSERT INTO custom_user (id, role_id, username, password, email)
     VALUES (gen_random_uuid(), user_role, user_username, user_password, user_email)
-    RETURNING id INTO new_user_id;
+    RETURNING * INTO new_user;
 
-    RETURN new_user_id;
+    RETURN new_user;
 END;
 $$ LANGUAGE plpgsql;
+
 
 -- create new playlist
 CREATE OR REPLACE FUNCTION add_playlist(user_username VARCHAR(128), playlist_title VARCHAR(128))
