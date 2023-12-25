@@ -5,6 +5,7 @@ import com.example.musicplatform.repository.AlbumRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,6 +25,8 @@ public class AlbumService {
             put("id", repository.add(album));
         }};
     }
+
+    public List<Album> searchAlbum(String query) {return repository.searchAlbum(query);}
 
 
 }

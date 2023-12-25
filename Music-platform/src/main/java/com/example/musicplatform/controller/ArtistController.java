@@ -35,4 +35,7 @@ public class ArtistController {
     public List<Song> getAllSongs(@PathVariable UUID id) {
         return service.getAllSongs(id);
     }
+
+    @GetMapping("/search/{query}")
+    public List<Artist> searchArtist(@PathVariable String query) {return service.searchArtist(query);}
 }

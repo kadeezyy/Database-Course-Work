@@ -6,6 +6,7 @@ import com.example.musicplatform.repository.PlaylistRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,4 +48,6 @@ public class PlaylistService {
             put("id", repository.removeSongFromPlaylist(songId, playlistId));
         }};
     }
+
+    public List<Playlist> searchPlaylist(String query) {return repository.searchPlaylist(query);}
 }

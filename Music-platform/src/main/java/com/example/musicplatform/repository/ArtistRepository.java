@@ -3,6 +3,7 @@ package com.example.musicplatform.repository;
 import com.example.musicplatform.entity.tables.ArtistSongs;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
+import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.Artist;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
@@ -46,5 +47,11 @@ public class ArtistRepository {
         song.setLikesCount(record.get(SONG.LIKES_COUNT));
 
         return song;
+    }
+
+    public List<Artist> searchArtist(String query) {
+        return jooq.selectFrom(ARTIST)
+                .where(ARTIST.NICKNAME.like("%" + query + "%"))
+                .fetch().map((record) -> record.into(Artist.class));
     }
 }

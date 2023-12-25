@@ -31,4 +31,6 @@ public class ArtistService {
     public List<Song> getAllSongs(UUID id) {
         return artistRepository.getAllSongs(id);
     }
+
+    public List<Artist> searchArtist(String query) {return artistRepository.searchArtist(query);}
 }
