@@ -2,10 +2,12 @@ package com.example.musicplatform.repository;
 
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
+import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -25,16 +27,23 @@ public class SongRepository {
 
     public UUID createSong(Song song) {
         return jooq.insertInto(SONG,
-                SONG.ID,
-                SONG.TITLE,
-                SONG.GENRE_ID,
-                SONG.CREATION_DATE,
-                SONG.LIKES_COUNT).values(
+                        SONG.ID,
+                        SONG.TITLE,
+                        SONG.GENRE_ID,
+                        SONG.CREATION_DATE,
+                        SONG.LIKES_COUNT)
+                .values(
                         song.getId(),
-                song.getTitle(),
-                song.getGenreId(),
-                song.getCreationDate(),
-                song.getLikesCount()
-        ).returning().fetchSingle().get(SONG.ID);
+                        song.getTitle(),
+                        song.getGenreId(),
+                        song.getCreationDate(),
+                        song.getLikesCount()
+                ).returning().fetchSingle().get(SONG.ID);
+    }
+
+    public List<Song> searchSong(String query) {
+        return jooq.selectFrom(SONG)
+                .where(SONG.TITLE.like("%" + query + "%"))
+                .fetch().map((record) -> record.into(Song.class));
     }
 }

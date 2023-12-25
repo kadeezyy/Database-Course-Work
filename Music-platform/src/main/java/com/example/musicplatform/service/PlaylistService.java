@@ -1,10 +1,12 @@
 package com.example.musicplatform.service;
 
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.repository.PlaylistRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,15 +31,15 @@ public class PlaylistService {
         }};
     }
 
-    public Map<String, UUID> createPlaylist(Playlist playlist) {
+    public Map<String, UUID> createPlaylist(CustomUser user, Playlist playlist) {
         return new HashMap<>() {{
-            put("id", repository.createPlaylist(playlist));
+            put("id", repository.createPlaylist(user, playlist));
         }};
     }
 
-    public Map<String, UUID> insertSongIntoPlaylist(UUID songId, UUID playlistId) {
+    public Map<String, UUID> insertSongIntoPlaylist(CustomUser user, UUID songId, UUID playlistId) {
         return new HashMap<>() {{
-            put("id", repository.insertSongIntoPlaylist(songId, playlistId));
+            put("id", repository.insertSongIntoPlaylist(user, songId, playlistId));
         }};
     }
 
@@ -46,4 +48,6 @@ public class PlaylistService {
             put("id", repository.removeSongFromPlaylist(songId, playlistId));
         }};
     }
+
+    public List<Playlist> searchPlaylist(String query) {return repository.searchPlaylist(query);}
 }
