@@ -36,15 +36,18 @@ public class SecurityConfiguration {
             "^/v1/.+/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$\n"
     );
 
+    private final List<String> requestMatchers = List.of(
+            ""
+    );
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(regexMatcher(regexRequestMatchers))
+                    auth.requestMatchers("/v1/user/*")
                             .permitAll()
                             .anyRequest().authenticated();
-
                 })
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

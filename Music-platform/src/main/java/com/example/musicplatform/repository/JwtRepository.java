@@ -18,8 +18,8 @@ public class JwtRepository {
         this.jooq = jooq;
     }
 
-    public UUID save(String token, CustomUser user) {
-        return jooq.select(Routines.addJwtToken(user.getId(), false, false, token)).fetchOne(0, UUID.class);
+    public UUID save(String token, UUID userId) {
+        return jooq.select(Routines.addJwtToken(userId, false, false, token)).fetchOne(0, UUID.class);
     }
 
     public List<JwtToken> findAllValidTokenByUser(CustomUser user) {

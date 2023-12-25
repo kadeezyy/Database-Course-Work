@@ -17,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,26 +37,22 @@ public class UserService {
             AuthenticationManager authenticationManager,
             JwtService jwtService,
             JwtRepository jwtTokenRepository,
-            DSLContext jooq) {
+            DSLContext jooq, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.jwtTokenRepository = jwtTokenRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public JwtTokenDto registerUser(CustomUserDto CustomUser) {
-        CustomUserDto user = CustomUserDto.builder()
-                .username(CustomUser.getUsername())
-                .password(passwordEncoder.encode(CustomUser.getPassword()))
-                .build();
+    public JwtTokenDto registerUser(CustomUserDto user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userRepository.findUserByUsername(user.getUsername()) != null)
             throw new NotFoundException(DataAccessMessages.NOT_UNIQUE_OBJECT.name());
-
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(savedUser);
         var refreshToken = jwtService.generateRefreshToken(savedUser);
-        saveUserToken(savedUser, jwtToken);
+        saveUserToken(savedUser.getId(), jwtToken);
         return JwtTokenDto.builder()
                 .access_token(jwtToken)
                 .refresh_token(refreshToken).build();
@@ -65,10 +60,10 @@ public class UserService {
 
     public JwtTokenDto authenticateUser(CustomUserDto customUser) throws AuthenticationException {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        customUser.getUsername(),
-                        customUser.getPassword()
-                )
+            new UsernamePasswordAuthenticationToken(
+                    customUser.getUsername(),
+                    customUser.getPassword()
+            )
         );
         var user = userRepository.findUserByUsername(customUser.getUsername());
         if (user == null)
@@ -76,7 +71,7 @@ public class UserService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        saveUserToken(user.getId(), jwtToken);
         return JwtTokenDto.builder()
                 .access_token(jwtToken)
                 .refresh_token(refreshToken)
@@ -98,7 +93,7 @@ public class UserService {
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
-                saveUserToken(user, accessToken);
+                saveUserToken(user.getId(), accessToken);
                 var authenticationResponse = JwtTokenDto.builder()
                         .access_token(accessToken)
                         .refresh_token(refreshToken).build();
@@ -134,7 +129,7 @@ public class UserService {
 //        return resultUsers;
 //    }
 
-    private void saveUserToken(CustomUser user, String jwtToken) {
-        jwtTokenRepository.save(jwtToken, user);
+    private void saveUserToken(UUID userId, String jwtToken) {
+        jwtTokenRepository.save(jwtToken, userId);
     }
 }
