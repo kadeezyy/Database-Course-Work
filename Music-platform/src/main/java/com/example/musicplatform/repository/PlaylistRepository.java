@@ -5,6 +5,7 @@ import com.example.musicplatform.entity.routines.AddPlaylist;
 import com.example.musicplatform.entity.tables.PlaylistSongs;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
+import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.Song;
@@ -74,5 +75,11 @@ public class PlaylistRepository {
                 .where(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID.equal(playlistId)
                         .and(PlaylistSongs.PLAYLIST_SONGS.SONG_ID.equal(songId)))
                 .returning().fetchSingle().get(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID);
+    }
+
+    public List<Playlist> searchPlaylist(String query) {
+        return jooq.selectFrom(PLAYLIST)
+                .where(PLAYLIST.TITLE.like("%" + query + "%"))
+                .fetch().map((record) -> record.into(Playlist.class));
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -51,4 +52,7 @@ public class PlaylistController {
     public Map<String, UUID> removeSongFromPlaylist(@RequestBody UUID songId, @RequestBody UUID playlistId) {
         return service.removeSongFromPlaylist(songId, playlistId);
     }
+
+    @GetMapping("/search/{query}")
+    public List<Playlist> searchPlaylist(@PathVariable String query) {return service.searchPlaylist(query);}
 }

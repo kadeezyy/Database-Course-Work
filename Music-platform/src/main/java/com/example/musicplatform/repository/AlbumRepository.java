@@ -36,4 +36,10 @@ public class AlbumRepository {
                 .where(ALBUM.ARTIST_ID.equal(artistId))
                 .fetch().map((record) -> record.into(Album.class));
     }
+
+    public List<Album> searchAlbum(String query) {
+        return jooq.selectFrom(ALBUM)
+                .where(ALBUM.TITLE.like("%" + query + "%"))
+                .fetch().map((record) -> record.into(Album.class));
+    }
 }
