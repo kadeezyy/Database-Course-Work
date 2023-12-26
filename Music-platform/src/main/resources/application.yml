@@ -7,8 +7,6 @@ spring:
             expiration-time: 604800000 # a week
             refresh-token:
                 expiration-time: 2419200000 # a month
-#        hashEncoder:
-#            algorithmInstance: SHA-256
     datasource:
         url: "jdbc:postgresql://localhost:5432/postgres"
         username: postgres
@@ -19,6 +17,8 @@ spring:
             minimum-idle: 10
     jooq:
         sql-dialect: postgres
+    upload:
+        path: "/storage"
 #datasource:
 #    driver: org.postgresql.Driver
 #    jdbcUrl: jdbc:postgresql://localhost:5432/postgres

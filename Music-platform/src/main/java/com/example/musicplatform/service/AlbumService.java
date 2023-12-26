@@ -1,6 +1,8 @@
 package com.example.musicplatform.service;
 
+import com.example.musicplatform.dto.AlbumDto;
 import com.example.musicplatform.model.pojos.Album;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.repository.AlbumRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ public class AlbumService {
         return repository.get(albumId);
     }
 
-    public HashMap<String, UUID> insertAlbum(Album album) {
+    public HashMap<String, UUID> insertAlbum(CustomUser user, AlbumDto album) {
         return new HashMap<>() {{
             put("id", repository.add(album));
         }};

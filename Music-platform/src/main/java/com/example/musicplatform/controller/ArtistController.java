@@ -1,13 +1,13 @@
 package com.example.musicplatform.controller;
 
+import com.example.musicplatform.dto.ArtistDto;
 import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.Artist;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Song;
 import com.example.musicplatform.service.ArtistService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,9 +26,16 @@ public class ArtistController {
         return service.getArtistInfo(id);
     }
 
-    @GetMapping("/getAll/{id}")
+
+    //todo: add 'limit' param
+    @GetMapping("/getAllAlbums/{id}")
     public List<Album> getArtistsAlbums(@PathVariable UUID id) {
         return service.getArtistsAlbums(id);
+    }
+
+    @PostMapping
+    public Artist createArtist(@AuthenticationPrincipal CustomUser user, @RequestBody ArtistDto artist) {
+        return service.createArtist(user, artist);
     }
 
     @GetMapping("/getArtistsSongs/{id}")
@@ -37,5 +44,7 @@ public class ArtistController {
     }
 
     @GetMapping("/search/{query}")
-    public List<Artist> searchArtist(@PathVariable String query) {return service.searchArtist(query);}
+    public List<Artist> searchArtist(@PathVariable String query) {
+        return service.searchArtist(query);
+    }
 }

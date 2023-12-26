@@ -1,8 +1,10 @@
 package com.example.musicplatform.controller;
 
-import com.example.musicplatform.model.pojos.Playlist;
+import com.example.musicplatform.dto.SongDto;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Song;
 import com.example.musicplatform.service.SongService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public class SongController {
     }
 
     @PostMapping("/insertSong")
-    public Map<String, UUID> insertSong(@RequestBody Song song) {
-        return service.createSong(song);
+    public Map<String, UUID> insertSong(@AuthenticationPrincipal CustomUser user, @RequestBody SongDto song) {
+        return service.createSong(user, song);
     }
 
     @GetMapping("/{id}")
@@ -29,5 +31,7 @@ public class SongController {
     }
 
     @GetMapping("/search/{query}")
-    public List<Song> searchSong(@PathVariable String query) {return service.searchSong(query);}
+    public List<Song> searchSong(@PathVariable String query) {
+        return service.searchSong(query);
+    }
 }

@@ -226,3 +226,21 @@ BEGIN
     RETURN jwt_token_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Add songs to artist_songs
+CREATE OR REPLACE FUNCTION add_artist_song(
+    artist_id UUID,
+    song_id UUID
+)
+    RETURNS UUID AS
+$$
+DECLARE
+    artist_song_id UUID;
+BEGIN
+    INSERT INTO artist_songs (artist_id, song_id)
+    VALUES (artist_id, song_id)
+    RETURNING id INTO artist_song_id;
+
+    RETURN artist_song_id;
+END;
+$$ LANGUAGE plpgsql;
