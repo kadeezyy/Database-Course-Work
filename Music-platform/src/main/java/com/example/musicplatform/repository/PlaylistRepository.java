@@ -34,7 +34,6 @@ public class PlaylistRepository {
         return jooq.selectFrom(SONG
                         .leftJoin(PlaylistSongs.PLAYLIST_SONGS)
                         .on(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID.equal(playlistId)))
-
                 .fetch()
                 .stream().distinct()
                 .map((record -> record.into(Song.class))).toList();

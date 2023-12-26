@@ -33,7 +33,7 @@ public class ArtistController {
         return service.getArtistsAlbums(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Artist createArtist(@AuthenticationPrincipal CustomUser user, @RequestBody ArtistDto artist) {
         return service.createArtist(user, artist);
     }

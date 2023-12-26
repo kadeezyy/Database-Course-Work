@@ -1,6 +1,7 @@
 package com.example.musicplatform.repository;
 
 import com.example.musicplatform.dto.ArtistDto;
+import com.example.musicplatform.entity.Routines;
 import com.example.musicplatform.entity.tables.ArtistSongs;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
@@ -45,6 +46,7 @@ public class ArtistRepository {
     }
 
     public Artist createArtist(CustomUser user, ArtistDto artist) {
-        return null;
+        return jooq.select(Routines.addArtist(user.getUsername(), artist.nickname()))
+                .fetchOneInto(Artist.class);
     }
 }
