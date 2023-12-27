@@ -7,18 +7,20 @@ spring:
             expiration-time: 604800000 # a week
             refresh-token:
                 expiration-time: 2419200000 # a month
+#        hashEncoder:
+#            algorithmInstance: SHA-256
     datasource:
-        url: "jdbc:postgresql://localhost:5432/postgres"
+        url: "jdbc:postgresql://localhost:5432/isdb"
         username: postgres
-        password: 31p6hd19
+        password: root
         driverClassName: org.postgresql.Driver
         hikari:
             maximum-pool-size: 10
             minimum-idle: 10
     jooq:
         sql-dialect: postgres
-    upload:
-        path: "/storage"
+upload:
+    path: "/C:/Users/hopeg/IdeaProjects/Music-Platform/Music-platform/storage"
 #datasource:
 #    driver: org.postgresql.Driver
 #    jdbcUrl: jdbc:postgresql://localhost:5432/postgres

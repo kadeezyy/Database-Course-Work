@@ -16,9 +16,9 @@
 	<properties>
 		<java.version>17</java.version>
 		<datasource.driver>org.postgresql.Driver</datasource.driver>
-		<datasource.jdbcUrl>jdbc:postgresql://localhost:5432/postgres</datasource.jdbcUrl>
+		<datasource.jdbcUrl>jdbc:postgresql://localhost:5432/isdb</datasource.jdbcUrl>
 		<datasource.username>postgres</datasource.username>
-		<datasource.password>31p6hd19</datasource.password>
+		<datasource.password>root</datasource.password>
 		<jooq.version>3.19.1</jooq.version>
 	</properties>
 	<dependencies>

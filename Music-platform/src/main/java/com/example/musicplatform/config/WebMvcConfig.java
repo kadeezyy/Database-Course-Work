@@ -15,7 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     public WebMvcConfig(Environment environment) {
         this.environment = environment;
-        this.uploadPath = environment.getRequiredProperty("spring.upload.path");
+        this.uploadPath = environment.getRequiredProperty("upload.path");
     }
 
 
