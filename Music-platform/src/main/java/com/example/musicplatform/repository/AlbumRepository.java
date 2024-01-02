@@ -33,6 +33,7 @@ public class AlbumRepository {
                 .from(Genre.GENRE)
                 .where(Genre.GENRE.ID.eq(album.genreId()))
                 .fetchOneInto(String.class);
+
         return jooq.select(Routines.addAlbum(artistName, genreName, album.title())).fetchOneInto(UUID.class);
     }
 

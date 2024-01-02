@@ -10,9 +10,9 @@ spring:
 #        hashEncoder:
 #            algorithmInstance: SHA-256
     datasource:
-        url: "jdbc:postgresql://localhost:5432/isdb"
+        url: "jdbc:postgresql://localhost:5432/postgres"
         username: postgres
-        password: root
+        password: 31p6hd19
         driverClassName: org.postgresql.Driver
         hikari:
             maximum-pool-size: 10
@@ -20,7 +20,7 @@ spring:
     jooq:
         sql-dialect: postgres
 upload:
-    path: "/C:/Users/hopeg/IdeaProjects/Music-Platform/Music-platform/storage"
+    path: "/storage"
 #datasource:
 #    driver: org.postgresql.Driver
 #    jdbcUrl: jdbc:postgresql://localhost:5432/postgres
