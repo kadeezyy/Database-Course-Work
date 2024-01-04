@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/v1/user/**").permitAll();
                     auth.requestMatchers("/img/**").permitAll();
-                    auth.requestMatchers("/img/**").permitAll();
+                    auth.requestMatchers("/audio/**").permitAll();
                     auth.requestMatchers("/v1/**").permitAll();
                 })
                 .sessionManagement(session -> {session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);})

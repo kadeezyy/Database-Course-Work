@@ -31,6 +31,12 @@ public class ArtistRepository {
         ).into(Artist.class);
     }
 
+    public Artist getByUser(UUID id) {
+        return jooq.selectFrom(ARTIST).where(ARTIST.USER_ID.equal(id)).fetchOptional().orElseThrow(
+                () -> new NotFoundException(DataAccessMessages.OBJECT_NOT_FOUND.name())
+        ).into(Artist.class);
+    }
+
     public List<Song> getAllSongs(UUID id) {
         return jooq.selectFrom(SONG
                         .join(ArtistSongs.ARTIST_SONGS)
