@@ -5,6 +5,7 @@ import com.example.musicplatform.model.pojos.Genre;
 import com.example.musicplatform.service.GenreService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,5 +26,10 @@ public class GenreController {
     @PostMapping("/insertGenre")
     public Map<String, UUID> createGenre(@RequestBody GenreDto genre) {
         return service.createGenre(genre);
+    }
+
+    @GetMapping("/getAllGenres")
+    public List<Genre> getAllGenres() {
+        return service.getAllGenres();
     }
 }

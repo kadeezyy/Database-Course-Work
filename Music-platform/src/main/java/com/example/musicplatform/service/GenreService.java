@@ -6,6 +6,7 @@ import com.example.musicplatform.repository.GenreRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,5 +26,9 @@ public class GenreService {
         return new HashMap<>(){{
             put("id", repository.addGenre(genre));
         }};
+    }
+
+    public List<Genre> getAllGenres() {
+        return repository.getAllGenres();
     }
 }

@@ -7,9 +7,9 @@ import com.example.musicplatform.exception.NotUniqueObjectException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.Genre;
 import org.jooq.DSLContext;
-import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -35,5 +35,9 @@ public class GenreRepository {
                         () -> new NotUniqueObjectException(DataAccessMessages.NOT_UNIQUE_OBJECT.name())
                 )
                 .into(UUID.class);
+    }
+
+    public List<Genre> getAllGenres() {
+        return jooq.select().from(GENRE).fetchInto(Genre.class);
     }
 }
