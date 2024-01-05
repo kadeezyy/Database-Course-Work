@@ -7,6 +7,7 @@ import com.example.musicplatform.service.AlbumService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -34,4 +35,19 @@ public class AlbumController {
     public Map<String, UUID> insertAlbum(@AuthenticationPrincipal CustomUser user, @RequestBody AlbumDto album) {
         return service.insertAlbum(user, album);
     }
+
+    @PostMapping("/insertSong")
+    public Map<String, UUID> insertSongIntoPlaylist(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody UUID songId,
+            @RequestBody UUID playlistId
+    ) {
+        return service.insertSongIntoAlbum(user, songId, playlistId);
+    }
+
+    @GetMapping("/getSongs/{id}")
+    public HashMap<String, Object> getPlaylist(@PathVariable UUID id) {
+        return service.getAlbumSongs(id);
+    }
+
 }

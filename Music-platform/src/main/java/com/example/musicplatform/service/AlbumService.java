@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -24,11 +25,25 @@ public class AlbumService {
 
     public HashMap<String, UUID> insertAlbum(CustomUser user, AlbumDto album) {
         return new HashMap<>() {{
-            put("id", repository.add(album));
+            put("id", repository.add(user, album));
         }};
     }
 
     public List<Album> searchAlbum(String query) {return repository.searchAlbum(query);}
 
 
+    public Map<String, UUID> insertSongIntoAlbum(CustomUser user, UUID songId, UUID playlistId) {
+        return new HashMap<>() {{
+            put("id", repository.insertSongIntoAlbum(user, songId, playlistId));
+        }};
+    }
+
+    public HashMap<String, Object> getAlbumSongs(UUID id) {
+        var albumInfo = repository.get(id);
+        var albumSongs = repository.getAlbumSongs(id);
+        return new HashMap<>() {{
+            put("info", albumInfo);
+            put("songs", albumSongs);
+        }};
+    }
 }
