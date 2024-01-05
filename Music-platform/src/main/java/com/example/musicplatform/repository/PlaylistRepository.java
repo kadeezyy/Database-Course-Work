@@ -2,6 +2,7 @@ package com.example.musicplatform.repository;
 
 import com.example.musicplatform.dto.PlaylistDto;
 import com.example.musicplatform.entity.Routines;
+import com.example.musicplatform.entity.tables.AlbumSongs;
 import com.example.musicplatform.entity.tables.PlaylistSongs;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.example.musicplatform.entity.tables.Song.SONG;
 
 @Repository
 public class PlaylistRepository {
@@ -33,7 +36,8 @@ public class PlaylistRepository {
     public List<Song> getPlaylistSongs(UUID playlistId) {
         return jooq.selectFrom(SONG
                         .leftJoin(PlaylistSongs.PLAYLIST_SONGS)
-                        .on(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID.equal(playlistId)))
+                        .on(PlaylistSongs.PLAYLIST_SONGS.SONG_ID.eq(SONG.ID)))
+                .where(PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID.equal(playlistId))
                 .fetch()
                 .stream().distinct()
                 .map((record -> record.into(Song.class))).toList();
