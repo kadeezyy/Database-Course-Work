@@ -16,10 +16,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public WebMvcConfig(Environment environment) {
         this.environment = environment;
         this.uploadPath = environment.getRequiredProperty("upload.path");
-        System.out.println(uploadPath);
     }
 
 
+    //todo: add handling to not being able to download sources except 'storage' directory
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**")

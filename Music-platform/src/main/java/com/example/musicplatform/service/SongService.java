@@ -1,5 +1,7 @@
 package com.example.musicplatform.service;
 
+import com.example.musicplatform.dto.SongDto;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.Song;
 import com.example.musicplatform.repository.SongRepository;
@@ -18,9 +20,9 @@ public class SongService {
         this.repository = repository;
     }
 
-    public Map<String, UUID> createSong(Song song) {
+    public Map<String, UUID> createSong(CustomUser user, SongDto song) {
         return new HashMap<>() {{
-            put("id", repository.createSong(song));
+            put("id", repository.createSong(user, song));
         }};
     }
 

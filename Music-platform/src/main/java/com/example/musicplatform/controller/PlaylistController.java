@@ -1,5 +1,6 @@
 package com.example.musicplatform.controller;
 
+import com.example.musicplatform.dto.PlaylistDto;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.PlaylistSongs;
@@ -34,7 +35,7 @@ public class PlaylistController {
     @PostMapping("/insertPlaylist")
     public Map<String, UUID> createPlaylist(
             @AuthenticationPrincipal CustomUser user,
-            @RequestBody Playlist playlist
+            @RequestBody PlaylistDto playlist
     ) {
         return service.createPlaylist(user, playlist);
     }
@@ -54,5 +55,7 @@ public class PlaylistController {
     }
 
     @GetMapping("/search/{query}")
-    public List<Playlist> searchPlaylist(@PathVariable String query) {return service.searchPlaylist(query);}
+    public List<Playlist> searchPlaylist(@PathVariable String query) {
+        return service.searchPlaylist(query);
+    }
 }

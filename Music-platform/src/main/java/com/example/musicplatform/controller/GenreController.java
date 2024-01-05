@@ -1,5 +1,6 @@
 package com.example.musicplatform.controller;
 
+import com.example.musicplatform.dto.GenreDto;
 import com.example.musicplatform.model.pojos.Genre;
 import com.example.musicplatform.service.GenreService;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +17,13 @@ public class GenreController {
         this.service = service;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getGenreInfo/{id}")
     public Genre getGenreInfo(@PathVariable UUID id) {
         return service.getGenreInfo(id);
     }
 
     @PostMapping("/insertGenre")
-    public Map<String, UUID> createGenre(@RequestBody Genre genre) {
+    public Map<String, UUID> createGenre(@RequestBody GenreDto genre) {
         return service.createGenre(genre);
     }
 }

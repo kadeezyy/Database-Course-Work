@@ -1,7 +1,9 @@
 package com.example.musicplatform.service;
 
+import com.example.musicplatform.dto.ArtistDto;
 import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.Artist;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Song;
 import com.example.musicplatform.repository.AlbumRepository;
 import com.example.musicplatform.repository.ArtistRepository;
@@ -32,5 +34,11 @@ public class ArtistService {
         return artistRepository.getAllSongs(id);
     }
 
-    public List<Artist> searchArtist(String query) {return artistRepository.searchArtist(query);}
+    public List<Artist> searchArtist(String query) {
+        return artistRepository.searchArtist(query);
+    }
+
+    public Artist createArtist(CustomUser user, ArtistDto artist) {
+        return artistRepository.createArtist(user, artist);
+    }
 }

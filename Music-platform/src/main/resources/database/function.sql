@@ -6,6 +6,9 @@ DROP FUNCTION IF EXISTS add_artist(VARCHAR(128), VARCHAR(128));
 DROP FUNCTION IF EXISTS add_album(VARCHAR(128), VARCHAR(128), VARCHAR(128));
 DROP FUNCTION IF EXISTS add_playlist(VARCHAR(128), VARCHAR(128));
 DROP FUNCTION IF EXISTS create_new_user(role, VARCHAR(128), VARCHAR(128), VARCHAR(128));
+DROP FUNCTION IF EXISTS add_artist_song(UUID, UUID);
+DROP FUNCTION IF EXISTS add_jwt_token(UUID, BOOL, BOOL, VARCHAR(128));
+DROP FUNCTION IF EXISTS add_album(VARCHAR(128), VARCHAR(128), VARCHAR(128));
 
 -- Получить ИД по указанному никнейму
 CREATE OR REPLACE FUNCTION get_artist_ids_by_username(username_param text)
@@ -169,20 +172,20 @@ $$ LANGUAGE plpgsql;
 
 -- add new artist
 CREATE OR REPLACE FUNCTION add_artist(user_name VARCHAR(128), artist_nickname VARCHAR(128))
-    RETURNS UUID AS
+    RETURNS artist AS
 $$
 DECLARE
-    user_id   UUID;
-    artist_id UUID;
+    user_id    UUID;
+    new_artist artist; -- Declaring a variable of the artist type to hold the result
 BEGIN
     -- Assuming the user already exists
     SELECT id INTO user_id FROM custom_user WHERE custom_user.username = user_name;
 
     INSERT INTO artist (id, user_id, nickname)
     VALUES (gen_random_uuid(), user_id, artist_nickname)
-    RETURNING id INTO artist_id;
+    RETURNING * INTO new_artist; -- Returning the entire row into the new_artist variable
 
-    RETURN artist_id;
+    RETURN new_artist;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -226,3 +229,22 @@ BEGIN
     RETURN jwt_token_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Add songs to artist_songs
+CREATE OR REPLACE FUNCTION add_artist_song(
+    artist_id UUID,
+    song_id UUID
+)
+    RETURNS artist_songs AS
+$$
+DECLARE
+    new_artist_song artist_songs;
+BEGIN
+    INSERT INTO artist_songs (artist_id, song_id)
+    VALUES (artist_id, song_id)
+    RETURNING * INTO new_artist_song;
+
+    RETURN new_artist_song;
+END;
+$$ LANGUAGE plpgsql;
+

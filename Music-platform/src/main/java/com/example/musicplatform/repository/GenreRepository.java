@@ -1,9 +1,13 @@
 package com.example.musicplatform.repository;
 
+import com.example.musicplatform.dto.GenreDto;
+import com.example.musicplatform.entity.Routines;
 import com.example.musicplatform.exception.NotFoundException;
+import com.example.musicplatform.exception.NotUniqueObjectException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.Genre;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
@@ -24,9 +28,12 @@ public class GenreRepository {
         ).into(Genre.class);
     }
 
-    public UUID addGenre(Genre genre) {
-        return jooq.insertInto(GENRE, GENRE.ID, GENRE.NAME, GENRE.DESCRIPTION).values(
-                genre.getId(), genre.getName(), genre.getDescription()
-        ).returning().fetchSingle().get(GENRE.ID);
+    public UUID addGenre(GenreDto genre) throws NotUniqueObjectException {
+        return jooq.select(Routines.addGenre(genre.name(), genre.description()))
+                .fetchOptional()
+                .orElseThrow(
+                        () -> new NotUniqueObjectException(DataAccessMessages.NOT_UNIQUE_OBJECT.name())
+                )
+                .into(UUID.class);
     }
 }

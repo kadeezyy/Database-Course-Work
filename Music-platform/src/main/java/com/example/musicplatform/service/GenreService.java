@@ -1,5 +1,6 @@
 package com.example.musicplatform.service;
 
+import com.example.musicplatform.dto.GenreDto;
 import com.example.musicplatform.model.pojos.Genre;
 import com.example.musicplatform.repository.GenreRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class GenreService {
         return repository.getGenreInfo(id);
     }
 
-    public Map<String, UUID> createGenre(Genre genre) {
+    public Map<String, UUID> createGenre(GenreDto genre) {
         return new HashMap<>(){{
             put("id", repository.addGenre(genre));
         }};

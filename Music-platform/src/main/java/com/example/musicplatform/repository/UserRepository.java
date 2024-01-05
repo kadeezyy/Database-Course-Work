@@ -7,7 +7,9 @@ import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.CustomUser;
 import org.jooq.DSLContext;
+
 import static org.jooq.impl.DSL.*;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,8 +1,12 @@
 package com.example.musicplatform.repository;
 
+import com.example.musicplatform.dto.SongDto;
+import com.example.musicplatform.entity.Routines;
+import com.example.musicplatform.entity.tables.Artist;
+import com.example.musicplatform.entity.tables.Genre;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
-import com.example.musicplatform.model.pojos.Album;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -25,20 +29,20 @@ public class SongRepository {
         ).into(Song.class);
     }
 
-    public UUID createSong(Song song) {
-        return jooq.insertInto(SONG,
-                        SONG.ID,
-                        SONG.TITLE,
-                        SONG.GENRE_ID,
-                        SONG.CREATION_DATE,
-                        SONG.LIKES_COUNT)
-                .values(
-                        song.getId(),
-                        song.getTitle(),
-                        song.getGenreId(),
-                        song.getCreationDate(),
-                        song.getLikesCount()
-                ).returning().fetchSingle().get(SONG.ID);
+    public UUID createSong(CustomUser user, SongDto song) {
+        var genreName = jooq
+                .select(Genre.GENRE.NAME)
+                .from(Genre.GENRE)
+                .where(Genre.GENRE.ID.eq(song.genreId()))
+                .fetchOneInto(String.class);
+        var songId = jooq.select(Routines.addSong(genreName, song.title())).fetchOneInto(UUID.class);
+        var artistId = jooq
+                .select(Artist.ARTIST.ID)
+                .from(Artist.ARTIST)
+                .where(Artist.ARTIST.USER_ID.eq(user.getId()))
+                .fetchOneInto(UUID.class);
+        jooq.select(Routines.addArtistSong(artistId, songId)).fetch();
+        return songId;
     }
 
     public List<Song> searchSong(String query) {

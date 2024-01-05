@@ -1,5 +1,6 @@
 package com.example.musicplatform.service;
 
+import com.example.musicplatform.dto.PlaylistDto;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.repository.PlaylistRepository;
@@ -31,7 +32,7 @@ public class PlaylistService {
         }};
     }
 
-    public Map<String, UUID> createPlaylist(CustomUser user, Playlist playlist) {
+    public Map<String, UUID> createPlaylist(CustomUser user, PlaylistDto playlist) {
         return new HashMap<>() {{
             put("id", repository.createPlaylist(user, playlist));
         }};
@@ -44,10 +45,12 @@ public class PlaylistService {
     }
 
     public Map<String, UUID> removeSongFromPlaylist(UUID songId, UUID playlistId) {
-        return new HashMap<>(){{
+        return new HashMap<>() {{
             put("id", repository.removeSongFromPlaylist(songId, playlistId));
         }};
     }
 
-    public List<Playlist> searchPlaylist(String query) {return repository.searchPlaylist(query);}
+    public List<Playlist> searchPlaylist(String query) {
+        return repository.searchPlaylist(query);
+    }
 }

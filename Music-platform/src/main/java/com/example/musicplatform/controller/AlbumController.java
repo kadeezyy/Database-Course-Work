@@ -1,7 +1,10 @@
 package com.example.musicplatform.controller;
 
+import com.example.musicplatform.dto.AlbumDto;
 import com.example.musicplatform.model.pojos.Album;
+import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.service.AlbumService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,10 +26,12 @@ public class AlbumController {
     }
 
     @GetMapping("/search/{query}")
-    public List<Album> searchAlbum(@PathVariable String query) {return service.searchAlbum(query);}
+    public List<Album> searchAlbum(@PathVariable String query) {
+        return service.searchAlbum(query);
+    }
 
-    @PostMapping
-    public Map<String, UUID> insertAlbum(@RequestBody Album album) {
-        return service.insertAlbum(album);
+    @PostMapping("/create_album")
+    public Map<String, UUID> insertAlbum(@AuthenticationPrincipal CustomUser user, @RequestBody AlbumDto album) {
+        return service.insertAlbum(user, album);
     }
 }
