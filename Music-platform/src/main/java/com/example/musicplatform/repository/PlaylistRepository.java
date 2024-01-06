@@ -66,4 +66,10 @@ public class PlaylistRepository {
                 .where(PLAYLIST.TITLE.like("%" + query + "%"))
                 .fetch().map((record) -> record.into(Playlist.class));
     }
+
+    public List<Playlist> getUserPlaylists(UUID userId) {
+        return jooq.selectFrom(PLAYLIST)
+                .where(PLAYLIST.USER_CREATOR_ID.eq(userId))
+                .fetch().map((record) -> record.into(Playlist.class));
+    }
 }

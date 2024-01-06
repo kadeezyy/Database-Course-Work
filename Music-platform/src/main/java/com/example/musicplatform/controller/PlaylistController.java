@@ -58,4 +58,9 @@ public class PlaylistController {
     public List<Playlist> searchPlaylist(@PathVariable String query) {
         return service.searchPlaylist(query);
     }
+
+    @PostMapping("/userPlaylists")
+    public List<Playlist> userPlaylists(@AuthenticationPrincipal CustomUser user) {
+        return service.getUserPlaylists(user.getId());
+    }
 }

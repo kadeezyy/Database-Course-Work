@@ -42,8 +42,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/v1/user/**").permitAll();
                     auth.requestMatchers("/img/**").permitAll();
                     auth.requestMatchers("/audio/**").permitAll();
-                    auth.anyRequest().authenticated();
-//                    auth.requestMatchers("/v1/**").permitAll();
+                    auth.requestMatchers("/v1/**").permitAll();
                 })
                 .sessionManagement(session -> {session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);})
                 .authenticationProvider(authenticationProvider)

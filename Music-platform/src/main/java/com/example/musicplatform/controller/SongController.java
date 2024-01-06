@@ -7,6 +7,7 @@ import com.example.musicplatform.service.SongService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -33,5 +34,12 @@ public class SongController {
     @GetMapping("/search/{query}")
     public List<Song> searchSong(@PathVariable String query) {
         return service.searchSong(query);
+    }
+
+    @GetMapping("/getAuthor/{songId}")
+    public Map<String, String> getAuthor(@PathVariable UUID songId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("title", service.getArtist(songId));
+        return map;
     }
 }

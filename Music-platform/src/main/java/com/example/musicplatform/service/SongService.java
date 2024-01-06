@@ -31,4 +31,8 @@ public class SongService {
     }
 
     public List<Song> searchSong(String query) {return repository.searchSong(query);}
+
+    public String getArtist(UUID songId) {
+        return repository.getAuthor(songId);
+    }
 }
