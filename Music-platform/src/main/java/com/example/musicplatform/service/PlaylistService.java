@@ -53,4 +53,8 @@ public class PlaylistService {
     public List<Playlist> searchPlaylist(String query) {
         return repository.searchPlaylist(query);
     }
+
+    public void likePlaylist(CustomUser user, UUID playlistId) {
+        repository.likePlaylist(user, playlistId);
+    }
 }

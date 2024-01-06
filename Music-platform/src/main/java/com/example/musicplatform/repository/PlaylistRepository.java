@@ -4,12 +4,16 @@ import com.example.musicplatform.dto.PlaylistDto;
 import com.example.musicplatform.entity.Routines;
 import com.example.musicplatform.entity.tables.AlbumSongs;
 import com.example.musicplatform.entity.tables.PlaylistSongs;
+import com.example.musicplatform.entity.tables.UserFavouriteAlbums;
+import com.example.musicplatform.entity.tables.UserFavouritePlaylists;
 import com.example.musicplatform.exception.NotFoundException;
+import com.example.musicplatform.exception.NotUniqueObjectException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -65,5 +69,20 @@ public class PlaylistRepository {
         return jooq.selectFrom(PLAYLIST)
                 .where(PLAYLIST.TITLE.like("%" + query + "%"))
                 .fetch().map((record) -> record.into(Playlist.class));
+    }
+
+    public void likePlaylist(CustomUser user, UUID playlistId) {
+        jooq.insertInto(UserFavouritePlaylists.USER_FAVOURITE_PLAYLISTS,
+                        UserFavouritePlaylists.USER_FAVOURITE_PLAYLISTS.PLAYLIST_ID,
+                        UserFavouritePlaylists.USER_FAVOURITE_PLAYLISTS.USER_ID)
+                .values(
+                        playlistId,
+                        user.getId()
+                )
+                .returning()
+                .fetchOptional()
+                .orElseThrow(
+                        () -> new DataAccessException(DataAccessMessages.NOT_UNIQUE_OBJECT.name())
+                );
     }
 }

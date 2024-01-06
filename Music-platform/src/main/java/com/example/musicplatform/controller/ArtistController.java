@@ -47,4 +47,12 @@ public class ArtistController {
     public List<Artist> searchArtist(@PathVariable String query) {
         return service.searchArtist(query);
     }
+
+    @PostMapping("/likeArtist/{id}")
+    public void likeArtist(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable UUID id
+    ) {
+        service.likeArtist(user, id);
+    }
 }

@@ -41,4 +41,8 @@ public class ArtistService {
     public Artist createArtist(CustomUser user, ArtistDto artist) {
         return artistRepository.createArtist(user, artist);
     }
+
+    public void likeArtist(CustomUser user, UUID artistId) {
+        artistRepository.likeArtist(user, artistId);
+    }
 }

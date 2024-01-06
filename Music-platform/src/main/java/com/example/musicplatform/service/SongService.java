@@ -30,5 +30,11 @@ public class SongService {
         return repository.getSong(id);
     }
 
-    public List<Song> searchSong(String query) {return repository.searchSong(query);}
+    public List<Song> searchSong(String query) {
+        return repository.searchSong(query);
+    }
+
+    public void likeSong(CustomUser user, UUID songId) {
+        repository.likeSong(user, songId);
+    }
 }

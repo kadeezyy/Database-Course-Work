@@ -50,4 +50,11 @@ public class AlbumController {
         return service.getAlbumSongs(id);
     }
 
+    @PostMapping("/likeAlbum/{id}")
+    public void likeAlbum(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable UUID id
+    ) {
+        service.likeAlbum(user, id);
+    }
 }

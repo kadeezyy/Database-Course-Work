@@ -2,16 +2,15 @@ package com.example.musicplatform.repository;
 
 import com.example.musicplatform.dto.AlbumDto;
 import com.example.musicplatform.entity.Routines;
-import com.example.musicplatform.entity.tables.AlbumSongs;
-import com.example.musicplatform.entity.tables.Artist;
-import com.example.musicplatform.entity.tables.Genre;
-import com.example.musicplatform.entity.tables.PlaylistSongs;
+import com.example.musicplatform.entity.tables.*;
 import com.example.musicplatform.exception.NotFoundException;
+import com.example.musicplatform.exception.NotUniqueObjectException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -77,5 +76,20 @@ public class AlbumRepository {
                 .fetch()
                 .stream().distinct()
                 .map((record -> record.into(Song.class))).toList();
+    }
+
+    public void likeAlbum(CustomUser user, UUID albumId) {
+        jooq.insertInto(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS,
+                        UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.ALBUM_ID,
+                        UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.USER_ID)
+                .values(
+                        albumId,
+                        user.getId()
+                )
+                .returning()
+                .fetchOptional()
+                .orElseThrow(
+                        () -> new DataAccessException(DataAccessMessages.NOT_UNIQUE_OBJECT.name())
+                );
     }
 }

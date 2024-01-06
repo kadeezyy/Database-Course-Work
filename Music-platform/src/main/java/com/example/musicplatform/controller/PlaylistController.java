@@ -58,4 +58,12 @@ public class PlaylistController {
     public List<Playlist> searchPlaylist(@PathVariable String query) {
         return service.searchPlaylist(query);
     }
+
+    @PostMapping("/likePlaylist/{id}")
+    public void likePlaylist(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable UUID id
+    ) {
+        service.likePlaylist(user, id);
+    }
 }
