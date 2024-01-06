@@ -1,6 +1,7 @@
 package com.example.musicplatform.controller;
 
 import com.example.musicplatform.dto.AlbumDto;
+import com.example.musicplatform.dto.AlbumSongDto;
 import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.service.AlbumService;
@@ -37,16 +38,15 @@ public class AlbumController {
     }
 
     @PostMapping("/insertSong")
-    public Map<String, UUID> insertSongIntoPlaylist(
+    public Map<String, UUID> insertSongIntoAlbum(
             @AuthenticationPrincipal CustomUser user,
-            @RequestBody UUID songId,
-            @RequestBody UUID playlistId
+            @RequestBody AlbumSongDto albumSongDto
     ) {
-        return service.insertSongIntoAlbum(user, songId, playlistId);
+        return service.insertSongIntoAlbum(user, albumSongDto.songId(), albumSongDto.albumId());
     }
 
     @GetMapping("/getSongs/{id}")
-    public HashMap<String, Object> getPlaylist(@PathVariable UUID id) {
+    public HashMap<String, Object> getAlbumSongs(@PathVariable UUID id) {
         return service.getAlbumSongs(id);
     }
 

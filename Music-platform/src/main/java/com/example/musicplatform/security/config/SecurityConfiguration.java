@@ -33,14 +33,6 @@ import java.util.stream.Collectors;
 public class SecurityConfiguration {
     JwtAuthenticationFilter jwtAuthFilter;
     AuthenticationProvider authenticationProvider;
-    private final List<String> regexRequestMatchers = List.of(
-            "^/v1/.+/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$\n"
-    );
-
-    private final List<String> requestMatchers = List.of(
-            ""
-    );
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -50,7 +42,8 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/v1/user/**").permitAll();
                     auth.requestMatchers("/img/**").permitAll();
                     auth.requestMatchers("/audio/**").permitAll();
-                    auth.requestMatchers("/v1/**").permitAll();
+                    auth.anyRequest().authenticated();
+//                    auth.requestMatchers("/v1/**").permitAll();
                 })
                 .sessionManagement(session -> {session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);})
                 .authenticationProvider(authenticationProvider)

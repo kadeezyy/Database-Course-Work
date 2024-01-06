@@ -15,8 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
-import static com.example.musicplatform.entity.tables.Song.SONG;
-
 @Repository
 public class PlaylistRepository {
     private final DSLContext jooq;
@@ -48,7 +46,7 @@ public class PlaylistRepository {
         return jooq.select(Routines.addPlaylist(user.getUsername(), playlist.title())).fetchOne(0, UUID.class);
     }
 
-    public UUID insertSongIntoPlaylist(CustomUser user, UUID songId, UUID playlistId) {
+    public UUID insertSongIntoPlaylist(UUID songId, UUID playlistId) {
         return jooq.insertInto(PlaylistSongs.PLAYLIST_SONGS,
                 PlaylistSongs.PLAYLIST_SONGS.PLAYLIST_ID,
                 PlaylistSongs.PLAYLIST_SONGS.SONG_ID).values(

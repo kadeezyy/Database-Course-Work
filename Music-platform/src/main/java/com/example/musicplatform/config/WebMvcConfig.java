@@ -10,11 +10,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @PropertySource("classpath:application.yml")
 public class WebMvcConfig implements WebMvcConfigurer {
-    private final Environment environment;
     private final String uploadPath;
 
     public WebMvcConfig(Environment environment) {
-        this.environment = environment;
         this.uploadPath = environment.getRequiredProperty("upload.path");
     }
 

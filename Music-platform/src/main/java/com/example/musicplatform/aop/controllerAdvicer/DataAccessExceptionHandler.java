@@ -20,7 +20,7 @@ public class DataAccessExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<ErrorMessage> handleNotUniqueObjectException(
+    public ResponseEntity<ErrorMessage> handleDataAccessException(
             DataAccessException exception
     ) {
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);

@@ -32,9 +32,9 @@ public class AlbumService {
     public List<Album> searchAlbum(String query) {return repository.searchAlbum(query);}
 
 
-    public Map<String, UUID> insertSongIntoAlbum(CustomUser user, UUID songId, UUID playlistId) {
+    public Map<String, UUID> insertSongIntoAlbum(CustomUser user, UUID songId, UUID albumId) {
         return new HashMap<>() {{
-            put("id", repository.insertSongIntoAlbum(user, songId, playlistId));
+            put("id", repository.insertSongIntoAlbum(user, songId, albumId));
         }};
     }
 

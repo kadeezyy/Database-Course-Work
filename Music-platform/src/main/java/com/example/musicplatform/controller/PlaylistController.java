@@ -1,6 +1,7 @@
 package com.example.musicplatform.controller;
 
 import com.example.musicplatform.dto.PlaylistDto;
+import com.example.musicplatform.dto.PlaylistSongDto;
 import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.PlaylistSongs;
@@ -42,11 +43,10 @@ public class PlaylistController {
 
     @PostMapping("/insertSong")
     public Map<String, UUID> insertSongIntoPlaylist(
-            @AuthenticationPrincipal CustomUser user,
-            @RequestBody UUID songId,
-            @RequestBody UUID playlistId
-    ) {
-        return service.insertSongIntoPlaylist(user, songId, playlistId);
+//            @AuthenticationPrincipal CustomUser user,
+            @RequestBody PlaylistSongDto playlistSong
+            ) {
+        return service.insertSongIntoPlaylist(playlistSong.songId(), playlistSong.playlistId());
     }
 
     @DeleteMapping("/removeSong")

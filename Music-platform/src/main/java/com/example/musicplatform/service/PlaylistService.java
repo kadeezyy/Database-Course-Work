@@ -38,9 +38,9 @@ public class PlaylistService {
         }};
     }
 
-    public Map<String, UUID> insertSongIntoPlaylist(CustomUser user, UUID songId, UUID playlistId) {
+    public Map<String, UUID> insertSongIntoPlaylist(UUID songId, UUID playlistId) {
         return new HashMap<>() {{
-            put("id", repository.insertSongIntoPlaylist(user, songId, playlistId));
+            put("id", repository.insertSongIntoPlaylist(songId, playlistId));
         }};
     }
 

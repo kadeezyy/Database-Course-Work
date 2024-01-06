@@ -62,7 +62,6 @@ public class AlbumRepository {
     }
 
     public UUID insertSongIntoAlbum(CustomUser user, UUID songId, UUID albumId) {
-        System.out.println(songId + " " + albumId + "___________alpha");
         return jooq.insertInto(AlbumSongs.ALBUM_SONGS,
                 AlbumSongs.ALBUM_SONGS.ALBUM_ID,
                 AlbumSongs.ALBUM_SONGS.SONG_ID).values(
