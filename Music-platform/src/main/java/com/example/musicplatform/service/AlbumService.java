@@ -46,4 +46,8 @@ public class AlbumService {
             put("songs", albumSongs);
         }};
     }
+
+    public void likeAlbum(CustomUser user, UUID albumId) {
+        repository.likeAlbum(user, albumId);
+    }
 }

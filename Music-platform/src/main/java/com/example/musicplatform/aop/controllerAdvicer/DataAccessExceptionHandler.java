@@ -16,6 +16,7 @@ public class DataAccessExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorMessage> handleNotUniqueObjectException(
             NotUniqueObjectException exception
     ) {
+        exception.printStackTrace();
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
@@ -23,6 +24,7 @@ public class DataAccessExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorMessage> handleDataAccessException(
             DataAccessException exception
     ) {
+        exception.printStackTrace();
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
@@ -30,6 +32,7 @@ public class DataAccessExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorMessage> handleNotFoundException(
             NotFoundException exception
     ) {
+        exception.printStackTrace();
         return new ResponseEntity<>(new ErrorMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
