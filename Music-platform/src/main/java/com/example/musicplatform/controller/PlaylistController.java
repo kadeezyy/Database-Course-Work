@@ -63,4 +63,9 @@ public class PlaylistController {
     public List<Playlist> userPlaylists(@AuthenticationPrincipal CustomUser user) {
         return service.getUserPlaylists(user.getId());
     }
+
+    @GetMapping("/getLikedPlaylists/")
+    public List<Playlist> likedPlaylists(@AuthenticationPrincipal CustomUser user) {
+        return service.getLikedPlaylist(user);
+    }
 }

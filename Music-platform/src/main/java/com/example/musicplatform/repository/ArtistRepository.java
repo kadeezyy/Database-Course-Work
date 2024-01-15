@@ -4,6 +4,7 @@ import com.example.musicplatform.dto.ArtistDto;
 import com.example.musicplatform.entity.Routines;
 import com.example.musicplatform.entity.tables.ArtistSongs;
 import com.example.musicplatform.entity.tables.UserFavouriteArtists;
+import com.example.musicplatform.entity.tables.UserLikedSongs;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.NotUniqueObjectException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.example.musicplatform.entity.tables.Song.SONG;
 
 @Repository
 public class ArtistRepository {
@@ -74,5 +77,17 @@ public class ArtistRepository {
                 .orElseThrow(
                         () -> new DataAccessException(DataAccessMessages.NOT_UNIQUE_OBJECT.name())
                 );
+    }
+
+    public List<Artist> getFavouriteArtists(CustomUser user) {
+        return jooq.selectFrom(ARTIST
+                        .leftJoin(UserFavouriteArtists.USER_FAVOURITE_ARTISTS)
+                        .on(UserFavouriteArtists.USER_FAVOURITE_ARTISTS.ARTIST_ID.eq(ARTIST.ID)))
+                .where(UserFavouriteArtists.USER_FAVOURITE_ARTISTS.USER_ID.eq(user.getId()))
+                .fetch()
+                .stream()
+                .distinct()
+                .map((record -> record.into(Artist.class)))
+                .toList();
     }
 }

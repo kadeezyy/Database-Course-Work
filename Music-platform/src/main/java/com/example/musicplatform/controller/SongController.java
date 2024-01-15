@@ -42,4 +42,9 @@ public class SongController {
         map.put("title", service.getArtist(songId));
         return map;
     }
+
+    @GetMapping("/getLikedSongs/")
+    public List<Song> likedSongs(@AuthenticationPrincipal CustomUser user) {
+        return service.getLikedSongs(user);
+    }
 }

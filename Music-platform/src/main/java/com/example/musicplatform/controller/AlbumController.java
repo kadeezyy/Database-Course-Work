@@ -4,6 +4,7 @@ import com.example.musicplatform.dto.AlbumDto;
 import com.example.musicplatform.dto.AlbumSongDto;
 import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.CustomUser;
+import com.example.musicplatform.model.pojos.Song;
 import com.example.musicplatform.service.AlbumService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,11 @@ public class AlbumController {
     @GetMapping("/getSongs/{id}")
     public HashMap<String, Object> getAlbumSongs(@PathVariable UUID id) {
         return service.getAlbumSongs(id);
+    }
+
+    @GetMapping("/getLikedSongs/")
+    public List<Song> getLikedSongs(@AuthenticationPrincipal CustomUser user) {
+        return service.getLikedSongs(user);
     }
 
     @PostMapping("/likeAlbum/{id}")

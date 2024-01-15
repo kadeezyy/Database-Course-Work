@@ -5,10 +5,12 @@ import com.example.musicplatform.entity.Routines;
 import com.example.musicplatform.entity.tables.Artist;
 import com.example.musicplatform.entity.tables.ArtistSongs;
 import com.example.musicplatform.entity.tables.Genre;
+import com.example.musicplatform.entity.tables.UserLikedSongs;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.AlbumSongs;
 import com.example.musicplatform.model.pojos.CustomUser;
+import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -60,5 +62,17 @@ public class SongRepository {
                 .on(Artist.ARTIST.ID.eq(ArtistSongs.ARTIST_SONGS.ARTIST_ID))
                 .where(ArtistSongs.ARTIST_SONGS.SONG_ID.eq(songId))
                 .fetchOneInto(String.class);
+    }
+
+    public List<Song> getLikedSongs(CustomUser user) {
+        return jooq.selectFrom(SONG
+                        .leftJoin(UserLikedSongs.USER_LIKED_SONGS)
+                        .on(UserLikedSongs.USER_LIKED_SONGS.SONG_ID.eq(SONG.ID)))
+                .where(UserLikedSongs.USER_LIKED_SONGS.USER_ID.eq(user.getId()))
+                .fetch()
+                .stream()
+                .distinct()
+                .map((record -> record.into(Song.class)))
+                .toList();
     }
 }

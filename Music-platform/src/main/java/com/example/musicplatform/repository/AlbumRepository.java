@@ -11,7 +11,9 @@ import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.UUID;
@@ -73,6 +75,16 @@ public class AlbumRepository {
                         .leftJoin(AlbumSongs.ALBUM_SONGS)
                         .on(AlbumSongs.ALBUM_SONGS.SONG_ID.eq(SONG.ID)))
                 .where(AlbumSongs.ALBUM_SONGS.ALBUM_ID.equal(albumId))
+                .fetch()
+                .stream().distinct()
+                .map((record -> record.into(Song.class))).toList();
+    }
+
+    public List<Song> getLikedSongs(CustomUser user) {
+        return jooq.selectFrom(SONG
+                        .leftJoin(UserLikedSongs.USER_LIKED_SONGS)
+                        .on(UserLikedSongs.USER_LIKED_SONGS.SONG_ID.eq(SONG.ID)))
+                .where(UserLikedSongs.USER_LIKED_SONGS.USER_ID.eq(user.getId()))
                 .fetch()
                 .stream().distinct()
                 .map((record -> record.into(Song.class))).toList();

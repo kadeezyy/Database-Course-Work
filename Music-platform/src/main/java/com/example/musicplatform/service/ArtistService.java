@@ -45,4 +45,8 @@ public class ArtistService {
     public void likeArtist(CustomUser user, UUID artistId) {
         artistRepository.likeArtist(user, artistId);
     }
+
+    public List<Artist> getLikedArtist(CustomUser user) {
+        return artistRepository.getFavouriteArtists(user);
+    }
 }

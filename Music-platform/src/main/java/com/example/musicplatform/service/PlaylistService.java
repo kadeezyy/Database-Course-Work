@@ -57,4 +57,8 @@ public class PlaylistService {
     public List<Playlist> getUserPlaylists(UUID userId) {
         return repository.getUserPlaylists(userId);
     }
+
+    public List<Playlist> getLikedPlaylist(CustomUser user) {
+        return repository.getLikedPlaylists(user);
+    }
 }

@@ -3,6 +3,7 @@ package com.example.musicplatform.service;
 import com.example.musicplatform.dto.AlbumDto;
 import com.example.musicplatform.model.pojos.Album;
 import com.example.musicplatform.model.pojos.CustomUser;
+import com.example.musicplatform.model.pojos.Song;
 import com.example.musicplatform.repository.AlbumRepository;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,10 @@ public class AlbumService {
             put("info", albumInfo);
             put("songs", albumSongs);
         }};
+    }
+
+    public List<Song> getLikedSongs(CustomUser user) {
+        return repository.getLikedSongs(user);
     }
 
     public void likeAlbum(CustomUser user, UUID albumId) {

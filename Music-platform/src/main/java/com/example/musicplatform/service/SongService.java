@@ -35,4 +35,8 @@ public class SongService {
     public String getArtist(UUID songId) {
         return repository.getAuthor(songId);
     }
+
+    public List<Song> getLikedSongs(CustomUser user) {
+        return repository.getLikedSongs(user);
+    }
 }
