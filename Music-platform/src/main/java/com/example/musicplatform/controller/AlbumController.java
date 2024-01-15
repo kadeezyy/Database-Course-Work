@@ -51,9 +51,9 @@ public class AlbumController {
         return service.getAlbumSongs(id);
     }
 
-    @GetMapping("/getLikedSongs/")
-    public List<Song> getLikedSongs(@AuthenticationPrincipal CustomUser user) {
-        return service.getLikedSongs(user);
+    @GetMapping("/getLikedAlbums/")
+    public List<Album> getLikedSongs(@AuthenticationPrincipal CustomUser user) {
+        return service.getLikedAlbums(user);
     }
 
     @PostMapping("/likeAlbum/{id}")

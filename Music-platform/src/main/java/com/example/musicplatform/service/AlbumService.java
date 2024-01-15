@@ -48,8 +48,8 @@ public class AlbumService {
         }};
     }
 
-    public List<Song> getLikedSongs(CustomUser user) {
-        return repository.getLikedSongs(user);
+    public List<Album> getLikedAlbums(CustomUser user) {
+        return repository.getLikedAlbums(user);
     }
 
     public void likeAlbum(CustomUser user, UUID albumId) {

@@ -80,14 +80,14 @@ public class AlbumRepository {
                 .map((record -> record.into(Song.class))).toList();
     }
 
-    public List<Song> getLikedSongs(CustomUser user) {
-        return jooq.selectFrom(SONG
-                        .leftJoin(UserLikedSongs.USER_LIKED_SONGS)
-                        .on(UserLikedSongs.USER_LIKED_SONGS.SONG_ID.eq(SONG.ID)))
-                .where(UserLikedSongs.USER_LIKED_SONGS.USER_ID.eq(user.getId()))
+    public List<Album> getLikedAlbums(CustomUser user) {
+        return jooq.selectFrom(ALBUM
+                        .leftJoin(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS)
+                        .on(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.ALBUM_ID.eq(ALBUM.ID)))
+                .where(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.USER_ID.eq(user.getId()))
                 .fetch()
                 .stream().distinct()
-                .map((record -> record.into(Song.class))).toList();
+                .map((record -> record.into(Album.class))).toList();
     }
 
     public void likeAlbum(CustomUser user, UUID albumId) {
