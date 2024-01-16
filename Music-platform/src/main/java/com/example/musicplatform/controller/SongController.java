@@ -43,13 +43,13 @@ public class SongController {
         return map;
     }
 
-    @GetMapping("/getLikedSongs/")
+    @GetMapping("/getLikedSong")
     public List<Song> likedSongs(@AuthenticationPrincipal CustomUser user) {
         return service.getLikedSongs(user);
     }
 
-    @PostMapping("/likeSong/")
-    public void likeSong(@AuthenticationPrincipal CustomUser user, @RequestBody UUID songId) {
+    @PostMapping("/likeSong/{songId}")
+    public void likeSong(@AuthenticationPrincipal CustomUser user, @PathVariable UUID songId) {
         service.likeSong(user, songId);
     }
 }

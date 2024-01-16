@@ -64,13 +64,13 @@ public class PlaylistController {
         return service.getUserPlaylists(user.getId());
     }
 
-    @GetMapping("/getLikedPlaylists/")
+    @GetMapping("/getLikedPlaylists")
     public List<Playlist> likedPlaylists(@AuthenticationPrincipal CustomUser user) {
         return service.getLikedPlaylist(user);
     }
 
-    @PostMapping("/likePlaylist/")
-    public void likePlaylist(@AuthenticationPrincipal CustomUser user, @RequestBody UUID playlistId) {
+    @PostMapping("/likePlaylist/{playlistId}")
+    public void likePlaylist(@AuthenticationPrincipal CustomUser user, @PathVariable UUID playlistId) {
         service.likePlaylist(user, playlistId);
     }
 }

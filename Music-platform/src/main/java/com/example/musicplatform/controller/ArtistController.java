@@ -56,7 +56,7 @@ public class ArtistController {
         service.likeArtist(user, id);
     }
 
-    @GetMapping("/getLikedArtist/")
+    @GetMapping("/getLikedArtist")
     public List<Artist> getLikedArtist(@AuthenticationPrincipal CustomUser user) {
         return service.getLikedArtist(user);
     }
