@@ -61,4 +61,8 @@ public class PlaylistService {
     public List<Playlist> getLikedPlaylist(CustomUser user) {
         return repository.getLikedPlaylists(user);
     }
+
+    public void likePlaylist(CustomUser user, UUID playlistId) {
+        repository.likePlaylist(user, playlistId);
+    }
 }

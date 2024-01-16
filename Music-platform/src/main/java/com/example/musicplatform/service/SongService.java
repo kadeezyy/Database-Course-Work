@@ -39,4 +39,8 @@ public class SongService {
     public List<Song> getLikedSongs(CustomUser user) {
         return repository.getLikedSongs(user);
     }
+
+    public void likeSong(CustomUser user, UUID songId) {
+        repository.likeSong(user, songId);
+    }
 }

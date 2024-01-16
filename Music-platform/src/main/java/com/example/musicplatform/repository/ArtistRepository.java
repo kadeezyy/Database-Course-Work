@@ -3,6 +3,7 @@ package com.example.musicplatform.repository;
 import com.example.musicplatform.dto.ArtistDto;
 import com.example.musicplatform.entity.Routines;
 import com.example.musicplatform.entity.tables.ArtistSongs;
+import com.example.musicplatform.entity.tables.UserFavouriteAlbums;
 import com.example.musicplatform.entity.tables.UserFavouriteArtists;
 import com.example.musicplatform.entity.tables.UserLikedSongs;
 import com.example.musicplatform.exception.NotFoundException;
@@ -63,20 +64,25 @@ public class ArtistRepository {
     }
 
     public void likeArtist(CustomUser user, UUID artistId) {
-        jooq.insertInto(
-                        UserFavouriteArtists.USER_FAVOURITE_ARTISTS,
-                        UserFavouriteArtists.USER_FAVOURITE_ARTISTS.ARTIST_ID,
-                        UserFavouriteArtists.USER_FAVOURITE_ARTISTS.USER_ID
+        var object = jooq.selectFrom(UserFavouriteArtists.USER_FAVOURITE_ARTISTS)
+                .where(UserFavouriteArtists.USER_FAVOURITE_ARTISTS.USER_ID.eq(user.getId())
+                        .and(UserFavouriteArtists.USER_FAVOURITE_ARTISTS.ARTIST_ID.eq(artistId))
                 )
-                .values(
-                        artistId,
-                        user.getId()
-                )
-                .returning()
                 .fetchOptional()
-                .orElseThrow(
-                        () -> new DataAccessException(DataAccessMessages.NOT_UNIQUE_OBJECT.name())
-                );
+                .orElse(null);
+        if (object != null) {
+            jooq.deleteFrom(UserFavouriteArtists.USER_FAVOURITE_ARTISTS)
+                    .where(UserFavouriteArtists.USER_FAVOURITE_ARTISTS.USER_ID.eq(user.getId())
+                            .and(UserFavouriteArtists.USER_FAVOURITE_ARTISTS.ARTIST_ID.eq(artistId))
+                    ).execute();
+            return;
+        }
+        jooq.insertInto(UserFavouriteArtists.USER_FAVOURITE_ARTISTS,
+                        UserFavouriteArtists.USER_FAVOURITE_ARTISTS.ARTIST_ID,
+                        UserFavouriteArtists.USER_FAVOURITE_ARTISTS.USER_ID)
+                .values(artistId, user.getId())
+                .returning()
+                .fetch();
     }
 
     public List<Artist> getFavouriteArtists(CustomUser user) {

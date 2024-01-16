@@ -2,10 +2,7 @@ package com.example.musicplatform.repository;
 
 import com.example.musicplatform.dto.SongDto;
 import com.example.musicplatform.entity.Routines;
-import com.example.musicplatform.entity.tables.Artist;
-import com.example.musicplatform.entity.tables.ArtistSongs;
-import com.example.musicplatform.entity.tables.Genre;
-import com.example.musicplatform.entity.tables.UserLikedSongs;
+import com.example.musicplatform.entity.tables.*;
 import com.example.musicplatform.exception.NotFoundException;
 import com.example.musicplatform.exception.enums.DataAccessMessages;
 import com.example.musicplatform.model.pojos.AlbumSongs;
@@ -13,6 +10,7 @@ import com.example.musicplatform.model.pojos.CustomUser;
 import com.example.musicplatform.model.pojos.Playlist;
 import com.example.musicplatform.model.pojos.Song;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -74,5 +72,27 @@ public class SongRepository {
                 .distinct()
                 .map((record -> record.into(Song.class)))
                 .toList();
+    }
+
+    public void likeSong(CustomUser user, UUID songId) {
+        var object = jooq.selectFrom(UserLikedSongs.USER_LIKED_SONGS)
+                .where(UserLikedSongs.USER_LIKED_SONGS.USER_ID.eq(user.getId())
+                        .and(UserLikedSongs.USER_LIKED_SONGS.SONG_ID.eq(songId))
+                )
+                .fetchOptional()
+                .orElse(null);
+        if (object != null) {
+            jooq.deleteFrom(UserLikedSongs.USER_LIKED_SONGS)
+                    .where(UserLikedSongs.USER_LIKED_SONGS.USER_ID.eq(user.getId())
+                            .and(UserLikedSongs.USER_LIKED_SONGS.SONG_ID.eq(songId))
+                    ).execute();
+            return;
+        }
+        jooq.insertInto(UserLikedSongs.USER_LIKED_SONGS,
+                        UserLikedSongs.USER_LIKED_SONGS.SONG_ID,
+                        UserLikedSongs.USER_LIKED_SONGS.USER_ID)
+                .values(songId, user.getId())
+                .returning()
+                .fetch();
     }
 }

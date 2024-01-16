@@ -91,17 +91,24 @@ public class AlbumRepository {
     }
 
     public void likeAlbum(CustomUser user, UUID albumId) {
+        var object = jooq.selectFrom(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS)
+                .where(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.USER_ID.eq(user.getId())
+                        .and(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.ALBUM_ID.eq(albumId))
+                )
+                .fetchOptional()
+                .orElse(null);
+        if (object != null) {
+            jooq.deleteFrom(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS)
+                    .where(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.USER_ID.eq(user.getId())
+                            .and(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.ALBUM_ID.eq(albumId))
+                    ).execute();
+            return;
+        }
         jooq.insertInto(UserFavouriteAlbums.USER_FAVOURITE_ALBUMS,
                         UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.ALBUM_ID,
                         UserFavouriteAlbums.USER_FAVOURITE_ALBUMS.USER_ID)
-                .values(
-                        albumId,
-                        user.getId()
-                )
+                .values(albumId, user.getId())
                 .returning()
-                .fetchOptional()
-                .orElseThrow(
-                        () -> new DataAccessException(DataAccessMessages.NOT_UNIQUE_OBJECT.name())
-                );
+                .fetch();
     }
 }

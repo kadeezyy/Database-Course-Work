@@ -20,6 +20,7 @@ public class PlaylistRepository {
     private final com.example.musicplatform.entity.tables.Playlist PLAYLIST = com.example.musicplatform.entity.tables.Playlist.PLAYLIST;
     private final com.example.musicplatform.entity.tables.Song SONG = com.example.musicplatform.entity.tables.Song.SONG;
     private final com.example.musicplatform.entity.tables.UserFavouritePlaylists USER_FAVOURITE_PLAYLISTS = com.example.musicplatform.entity.tables.UserFavouritePlaylists.USER_FAVOURITE_PLAYLISTS;
+
     public PlaylistRepository(DSLContext jooq) {
         this.jooq = jooq;
     }
@@ -82,5 +83,27 @@ public class PlaylistRepository {
                 .distinct()
                 .map((record -> record.into(Playlist.class)))
                 .toList();
+    }
+
+    public void likePlaylist(CustomUser user, UUID playlistId) {
+        var object = jooq.selectFrom(USER_FAVOURITE_PLAYLISTS)
+                .where(USER_FAVOURITE_PLAYLISTS.USER_ID.eq(user.getId())
+                        .and(USER_FAVOURITE_PLAYLISTS.PLAYLIST_ID.eq(playlistId))
+                )
+                .fetchOptional()
+                .orElse(null);
+        if (object != null) {
+            jooq.deleteFrom(USER_FAVOURITE_PLAYLISTS)
+                    .where(USER_FAVOURITE_PLAYLISTS.USER_ID.eq(user.getId())
+                            .and(USER_FAVOURITE_PLAYLISTS.PLAYLIST_ID.eq(playlistId))
+                    ).execute();
+            return;
+        }
+        jooq.insertInto(USER_FAVOURITE_PLAYLISTS,
+                        USER_FAVOURITE_PLAYLISTS.PLAYLIST_ID,
+                        USER_FAVOURITE_PLAYLISTS.USER_ID)
+                .values(playlistId, user.getId())
+                .returning()
+                .fetch();
     }
 }

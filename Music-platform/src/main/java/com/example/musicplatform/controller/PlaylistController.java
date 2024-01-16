@@ -68,4 +68,9 @@ public class PlaylistController {
     public List<Playlist> likedPlaylists(@AuthenticationPrincipal CustomUser user) {
         return service.getLikedPlaylist(user);
     }
+
+    @PostMapping("/likePlaylist/")
+    public void likePlaylist(@AuthenticationPrincipal CustomUser user, @RequestBody UUID playlistId) {
+        service.likePlaylist(user, playlistId);
+    }
 }
